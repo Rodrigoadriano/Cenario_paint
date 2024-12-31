@@ -72,15 +72,25 @@ let TexturasArray = [
     new textura("brick_sepia", "18.png"),
     new textura("pencil", "pencil.png")
 ];
-function preloadTextures(texturas: textura[]) {
-    texturas.forEach((t) => {
+async function preloadTextures(texturas: textura[]): Promise<void> {
+    const promises = texturas.map((t) => {
         if (!loadedTextures[t.name]) {
-            const img = new Image();
-            img.src = t.texturaURL; // Define o URL da imagem
-            loadedTextures[t.name] = img; // Armazena a imagem carregada
+            return new Promise<void>((resolve, reject) => {
+                const img = new Image();
+                img.src = t.texturaURL; // Define o URL da imagem
+                img.onload = () => {
+                    loadedTextures[t.name] = img; // Armazena a imagem carregada
+                    resolve();
+                };
+                img.onerror = (err) => reject(`Erro ao carregar textura: ${t.name}`);
+            });
         }
+        return Promise.resolve(); // Se já está carregada, retorna uma Promise resolvida
     });
+
+    await Promise.all(promises); // Aguarda todas as Promises serem resolvidas
 }
+
 function drawGrid() {
     for (let x = 0; x < canvas.width; x += gridSize) {
         for (let y = 0; y < canvas.height; y += gridSize) {
@@ -186,7 +196,7 @@ function paint(event: MouseEvent) {
         render();
     }
 }
-// Zoom functionality
+
 canvas.addEventListener('wheel', (event: WheelEvent) => {
     event.preventDefault();
 
@@ -256,6 +266,14 @@ canvasContainer.addEventListener('mouseleave', () => {
     canvasContainer.style.cursor = 'default';
 });
 
-preloadTextures(TexturasArray);
-seletorBlocos(blocosArray, TexturasArray);
-render()
+async function init() {
+    try {
+        await preloadTextures(TexturasArray); // Aguarda o carregamento das texturas
+        seletorBlocos(blocosArray, TexturasArray); // Usa as texturas carregadas
+        render(); // Renderiza a aplicação
+    } catch (error) {
+        console.error(error); // Lida com erros no carregamento
+    }
+}
+
+init(); // Inicia o processo

@@ -1,4 +1,13 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 const canvas = document.getElementById('canvas');
 const canvasContainer = document.getElementsByClassName('canvas_container')[0];
 const ctx = canvas.getContext('2d');
@@ -55,12 +64,22 @@ let TexturasArray = [
     new textura("pencil", "pencil.png")
 ];
 function preloadTextures(texturas) {
-    texturas.forEach((t) => {
-        if (!loadedTextures[t.name]) {
-            const img = new Image();
-            img.src = t.texturaURL; // Define o URL da imagem
-            loadedTextures[t.name] = img; // Armazena a imagem carregada
-        }
+    return __awaiter(this, void 0, void 0, function* () {
+        const promises = texturas.map((t) => {
+            if (!loadedTextures[t.name]) {
+                return new Promise((resolve, reject) => {
+                    const img = new Image();
+                    img.src = t.texturaURL; // Define o URL da imagem
+                    img.onload = () => {
+                        loadedTextures[t.name] = img; // Armazena a imagem carregada
+                        resolve();
+                    };
+                    img.onerror = (err) => reject(`Erro ao carregar textura: ${t.name}`);
+                });
+            }
+            return Promise.resolve(); // Se já está carregada, retorna uma Promise resolvida
+        });
+        yield Promise.all(promises); // Aguarda todas as Promises serem resolvidas
     });
 }
 function drawGrid() {
@@ -140,7 +159,6 @@ function paint(event) {
         render();
     }
 }
-// Zoom functionality
 canvas.addEventListener('wheel', (event) => {
     event.preventDefault();
     const rect = canvas.getBoundingClientRect();
@@ -204,6 +222,16 @@ canvasContainer.addEventListener('mouseleave', () => {
     isDragging = false;
     canvasContainer.style.cursor = 'default';
 });
-preloadTextures(TexturasArray);
-seletorBlocos(blocosArray, TexturasArray);
-render();
+function init() {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            yield preloadTextures(TexturasArray); // Aguarda o carregamento das texturas
+            seletorBlocos(blocosArray, TexturasArray); // Usa as texturas carregadas
+            render(); // Renderiza a aplicação
+        }
+        catch (error) {
+            console.error(error); // Lida com erros no carregamento
+        }
+    });
+}
+init(); // Inicia o processo
