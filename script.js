@@ -15,6 +15,7 @@ const gridSize = 64;
 let Zoom = 1;
 const scaleFactor = 1.1;
 let cordenadas = [];
+let forma = [];
 let isDragging = false;
 let startX, startY;
 const loadedTextures = {};
@@ -132,13 +133,14 @@ function DrawBloco(BlocoSelected, texturas) {
 function render() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawGrid();
+    forno();
     // Clear the canvas
-    cordenadas.forEach((bloco) => {
+    forma.forEach((bloco) => {
         DrawBloco(bloco, TexturasArray);
     });
+    forma = [];
 }
 function paint(event) {
-    console.log(deletar);
     const rect = canvas.getBoundingClientRect();
     const x = (event.clientX - rect.left) / Zoom;
     const y = (event.clientY - rect.top) / Zoom;
@@ -158,6 +160,13 @@ function paint(event) {
         }
         render();
     }
+}
+function forno() {
+    cordenadas.forEach((bloco) => {
+        //clear forma
+        forma.push(Object.assign({}, bloco));
+        console.log(forma);
+    });
 }
 canvas.addEventListener('wheel', (event) => {
     event.preventDefault();

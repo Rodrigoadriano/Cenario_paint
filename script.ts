@@ -5,6 +5,7 @@ const gridSize = 64;
 let Zoom = 1;
 const scaleFactor = 1.1;
 let cordenadas: Bloco[] = [];
+let forma: Bloco[] = [];
 let isDragging = false;
 let startX: number, startY: number;
 const loadedTextures: Record<string, HTMLImageElement> = {};
@@ -158,16 +159,19 @@ function render() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     drawGrid();
+    forno();
 // Clear the canvas
 
-    cordenadas.forEach((bloco) => {
+    forma.forEach((bloco) => {
         
         DrawBloco(bloco, TexturasArray);
     });
+
+    forma = [];
     
 }
 function paint(event: MouseEvent) {
-    console.log(deletar)
+
     const rect = canvas.getBoundingClientRect();
     const x = (event.clientX - rect.left) / Zoom;
     const y = (event.clientY - rect.top) / Zoom;
@@ -187,16 +191,25 @@ function paint(event: MouseEvent) {
         if (index !== -1) {
             // Existe: remove o bloco
             cordenadas.splice(index, 1);
-        
+            
         }
         if(!deletar){
             cordenadas.push({ ...Blocoselected });
+            
         }
     
         render();
+        
     }
 }
-
+function forno() {
+    cordenadas.forEach((bloco) => {
+        //clear forma
+       
+        forma.push({ ...bloco });
+        console.log(forma);
+    });
+}
 canvas.addEventListener('wheel', (event: WheelEvent) => {
     event.preventDefault();
 
