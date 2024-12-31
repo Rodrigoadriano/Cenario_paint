@@ -170,16 +170,26 @@ function render() {
     forma = [];
     
 }
+
+let lastDx: number | null = null;
+let lastDy: number | null = null;
 function paint(event: MouseEvent) {
 
     const rect = canvas.getBoundingClientRect();
     const x = (event.clientX - rect.left) / Zoom;
     const y = (event.clientY - rect.top) / Zoom;
-    
+    const dx = Math.floor(x / gridSize) * gridSize;
+    const dy = Math.floor(y / gridSize) * gridSize;
 
+    if (dx !== lastDx || dy !== lastDy) {
+        // Atualizar as últimas posições processadas
+        lastDx = dx;
+        lastDy = dy;
+
+    
         if (Blocoselected) {
-            Blocoselected.dx = Math.floor(x / gridSize) * gridSize;
-            Blocoselected.dy = Math.floor(y / gridSize) * gridSize;
+            Blocoselected.dx = dx;
+            Blocoselected.dy = dy;
             Blocoselected.dh = gridSize;
             Blocoselected.dw = gridSize;
 
@@ -193,12 +203,15 @@ function paint(event: MouseEvent) {
             cordenadas.splice(index, 1);
             
         }
+        
+    }
         if(!deletar){
-            cordenadas.push({ ...Blocoselected });
-            
+            cordenadas.push({ ...Blocoselected! });
+             
         }
     
         render();
+
         
     }
 }
@@ -207,8 +220,11 @@ function forno() {
         //clear forma
        
         forma.push({ ...bloco });
-        console.log(forma);
-    });
+    },
+
+    console.log(forma)
+
+);
 }
 canvas.addEventListener('wheel', (event: WheelEvent) => {
     event.preventDefault();

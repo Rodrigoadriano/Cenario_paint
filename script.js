@@ -140,20 +140,29 @@ function render() {
     });
     forma = [];
 }
+let lastDx = null;
+let lastDy = null;
 function paint(event) {
     const rect = canvas.getBoundingClientRect();
     const x = (event.clientX - rect.left) / Zoom;
     const y = (event.clientY - rect.top) / Zoom;
-    if (Blocoselected) {
-        Blocoselected.dx = Math.floor(x / gridSize) * gridSize;
-        Blocoselected.dy = Math.floor(y / gridSize) * gridSize;
-        Blocoselected.dh = gridSize;
-        Blocoselected.dw = gridSize;
-        // Verificar se já existe um bloco nas mesmas coordenadas
-        const index = cordenadas.findIndex((Bloco) => Bloco.dx === Blocoselected.dx && Bloco.dy === Blocoselected.dy);
-        if (index !== -1) {
-            // Existe: remove o bloco
-            cordenadas.splice(index, 1);
+    const dx = Math.floor(x / gridSize) * gridSize;
+    const dy = Math.floor(y / gridSize) * gridSize;
+    if (dx !== lastDx || dy !== lastDy) {
+        // Atualizar as últimas posições processadas
+        lastDx = dx;
+        lastDy = dy;
+        if (Blocoselected) {
+            Blocoselected.dx = dx;
+            Blocoselected.dy = dy;
+            Blocoselected.dh = gridSize;
+            Blocoselected.dw = gridSize;
+            // Verificar se já existe um bloco nas mesmas coordenadas
+            const index = cordenadas.findIndex((Bloco) => Bloco.dx === Blocoselected.dx && Bloco.dy === Blocoselected.dy);
+            if (index !== -1) {
+                // Existe: remove o bloco
+                cordenadas.splice(index, 1);
+            }
         }
         if (!deletar) {
             cordenadas.push(Object.assign({}, Blocoselected));
@@ -165,8 +174,7 @@ function forno() {
     cordenadas.forEach((bloco) => {
         //clear forma
         forma.push(Object.assign({}, bloco));
-        console.log(forma);
-    });
+    }, console.log(forma));
 }
 canvas.addEventListener('wheel', (event) => {
     event.preventDefault();
