@@ -171,23 +171,41 @@ function paint(event) {
     }
 }
 function forno() {
-    let BlocoEsquerda = null;
+    let coringa = null;
     cordenadas.forEach((bloco) => {
         let esquerda = bloco.dx - gridSize;
+        let direita = bloco.dx + gridSize;
+        let cima = bloco.dy - gridSize;
+        let baixo = bloco.dy + gridSize;
         const esquerdaVazia = !cordenadas.some((b) => b.dx === esquerda && b.dy === bloco.dy);
-        // console.log(`Bloco: ${JSON.stringify(bloco)}, Esquerda: ${esquerda}, EsquerdaVazia: ${esquerdaVazia}`);
-        if (esquerdaVazia) {
-            BlocoEsquerda = blocosArray[1];
-            BlocoEsquerda.dx = bloco.dx;
-            BlocoEsquerda.dy = bloco.dy;
-            BlocoEsquerda.dh = gridSize;
-            BlocoEsquerda.dw = gridSize;
-            forma.push(Object.assign({}, BlocoEsquerda));
+        const direitaVazia = !cordenadas.some((b) => b.dx === direita && b.dy === bloco.dy);
+        const cimaVazia = !cordenadas.some((b) => b.dy === cima && b.dx === bloco.dx);
+        const baixoVazia = !cordenadas.some((b) => b.dy === baixo && b.dx === bloco.dx);
+        switch (true) {
+            case esquerdaVazia && direitaVazia && cimaVazia && baixoVazia:
+                coringa = blocosArray[0]; // Exemplo: bloco para todos os lados vazios
+                break;
+            case esquerdaVazia:
+                coringa = blocosArray[1]; // Exemplo: bloco para esquerda vazia
+                break;
+            case direitaVazia:
+                coringa = blocosArray[2]; // Exemplo: bloco para direita vazia
+                break;
+            case cimaVazia:
+                coringa = blocosArray[3]; // Exemplo: bloco para cima vazia
+                break;
+            case baixoVazia:
+                coringa = blocosArray[4]; // Exemplo: bloco para baixo vazia
+                break;
+            default:
+                coringa = bloco; // Nenhum lado vazio
+                break;
         }
-        else {
-            forma.push(Object.assign({}, bloco));
-        }
-        ;
+        coringa.dx = bloco.dx;
+        coringa.dy = bloco.dy;
+        coringa.dh = gridSize;
+        coringa.dw = gridSize;
+        forma.push(Object.assign({}, coringa));
         // forma.push({ ...BlocoEsquerda! });
     });
 }
