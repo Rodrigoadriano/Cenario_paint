@@ -13,6 +13,8 @@ let blocos: NodeListOf<HTMLDivElement> = document.querySelectorAll('.blocos');
 let Blocoselected: Bloco | null = null;
 let deletar = false;
 let clicked = false;
+let lastDx: number | null = null;
+let lastDy: number | null = null;
 
 if (canvas) {
     if (ctx) {
@@ -137,22 +139,22 @@ function seletorBlocos(bloco: Bloco[], texturas: textura[]) {
         blocoContainer.appendChild(div);
     });
 }
-function DrawBloco(BlocoSelected: Bloco, texturas: textura[]) {
-        const texture = loadedTextures[BlocoSelected.name];
+function DrawBloco(B1: Bloco, texturas: textura[]) {
+        const texture = loadedTextures[B1.name];
         if (texture) {
             ctx.drawImage(
                 texture,
-                BlocoSelected.sx,
-                BlocoSelected.sy,
-                BlocoSelected.sw,
-                BlocoSelected.sh,
-                BlocoSelected.dx!,
-                BlocoSelected.dy!,
-                BlocoSelected.dw!,
-                BlocoSelected.dh!
+                B1.sx,
+                B1.sy,
+                B1.sw,
+                B1.sh,
+                B1.dx!,
+                B1.dy!,
+                B1.dw!,
+                B1.dh!
             );
         } else {
-            console.error(`Textura não encontrada para: ${BlocoSelected.name}`);
+            console.error(`Textura não encontrada para: ${B1.name}`);
         }
 }
 function render() {
@@ -163,7 +165,7 @@ function render() {
 // Clear the canvas
 
     forma.forEach((bloco) => {
-        
+     
         DrawBloco(bloco, TexturasArray);
     });
 
@@ -171,8 +173,7 @@ function render() {
     
 }
 
-let lastDx: number | null = null;
-let lastDy: number | null = null;
+
 function paint(event: MouseEvent) {
 
     const rect = canvas.getBoundingClientRect();
@@ -209,23 +210,46 @@ function paint(event: MouseEvent) {
             cordenadas.push({ ...Blocoselected! });
              
         }
-    
+
         render();
 
         
     }
 }
 function forno() {
+    let BlocoEsquerda: Bloco | null = null;
+
     cordenadas.forEach((bloco) => {
-        //clear forma
-       
-        forma.push({ ...bloco });
-    },
+        let esquerda = bloco.dx! - gridSize 
+    
+        const esquerdaVazia = !cordenadas.some((b) => b.dx === esquerda && b.dy === bloco.dy);
+        // console.log(`Bloco: ${JSON.stringify(bloco)}, Esquerda: ${esquerda}, EsquerdaVazia: ${esquerdaVazia}`);
+    
+        
+        if (esquerdaVazia) {
+            BlocoEsquerda = blocosArray[1];
 
-    console.log(forma)
+            BlocoEsquerda.dx = bloco.dx;
+            BlocoEsquerda.dy = bloco.dy;
+            BlocoEsquerda.dh = gridSize;
+            BlocoEsquerda.dw = gridSize;
+            forma.push({ ...BlocoEsquerda });
 
-);
+        }else{
+ 
+            forma.push({ ...bloco });
+        };
+  
+
+        // forma.push({ ...BlocoEsquerda! });
+        
+    
+    })
+
+    
+
 }
+
 canvas.addEventListener('wheel', (event: WheelEvent) => {
     event.preventDefault();
 

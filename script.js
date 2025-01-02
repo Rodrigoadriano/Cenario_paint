@@ -23,6 +23,8 @@ let blocos = document.querySelectorAll('.blocos');
 let Blocoselected = null;
 let deletar = false;
 let clicked = false;
+let lastDx = null;
+let lastDy = null;
 if (canvas) {
     if (ctx) {
         ctx.imageSmoothingEnabled = false;
@@ -121,13 +123,13 @@ function seletorBlocos(bloco, texturas) {
         blocoContainer.appendChild(div);
     });
 }
-function DrawBloco(BlocoSelected, texturas) {
-    const texture = loadedTextures[BlocoSelected.name];
+function DrawBloco(B1, texturas) {
+    const texture = loadedTextures[B1.name];
     if (texture) {
-        ctx.drawImage(texture, BlocoSelected.sx, BlocoSelected.sy, BlocoSelected.sw, BlocoSelected.sh, BlocoSelected.dx, BlocoSelected.dy, BlocoSelected.dw, BlocoSelected.dh);
+        ctx.drawImage(texture, B1.sx, B1.sy, B1.sw, B1.sh, B1.dx, B1.dy, B1.dw, B1.dh);
     }
     else {
-        console.error(`Textura não encontrada para: ${BlocoSelected.name}`);
+        console.error(`Textura não encontrada para: ${B1.name}`);
     }
 }
 function render() {
@@ -140,8 +142,6 @@ function render() {
     });
     forma = [];
 }
-let lastDx = null;
-let lastDy = null;
 function paint(event) {
     const rect = canvas.getBoundingClientRect();
     const x = (event.clientX - rect.left) / Zoom;
@@ -171,10 +171,25 @@ function paint(event) {
     }
 }
 function forno() {
+    let BlocoEsquerda = null;
     cordenadas.forEach((bloco) => {
-        //clear forma
-        forma.push(Object.assign({}, bloco));
-    }, console.log(forma));
+        let esquerda = bloco.dx - gridSize;
+        const esquerdaVazia = !cordenadas.some((b) => b.dx === esquerda && b.dy === bloco.dy);
+        // console.log(`Bloco: ${JSON.stringify(bloco)}, Esquerda: ${esquerda}, EsquerdaVazia: ${esquerdaVazia}`);
+        if (esquerdaVazia) {
+            BlocoEsquerda = blocosArray[1];
+            BlocoEsquerda.dx = bloco.dx;
+            BlocoEsquerda.dy = bloco.dy;
+            BlocoEsquerda.dh = gridSize;
+            BlocoEsquerda.dw = gridSize;
+            forma.push(Object.assign({}, BlocoEsquerda));
+        }
+        else {
+            forma.push(Object.assign({}, bloco));
+        }
+        ;
+        // forma.push({ ...BlocoEsquerda! });
+    });
 }
 canvas.addEventListener('wheel', (event) => {
     event.preventDefault();
