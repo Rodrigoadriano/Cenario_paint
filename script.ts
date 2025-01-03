@@ -1,7 +1,7 @@
 const canvas = document.getElementById('canvas') as HTMLCanvasElement ;
 const canvasContainer = document.getElementsByClassName('canvas_container')[0] as HTMLElement;
 const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
-const gridSize = 64;
+const gridSize = 32;
 let Zoom = 1;
 const scaleFactor = 1.1;
 let cordenadas: Bloco[] = [];
@@ -32,15 +32,15 @@ class Bloco {
     sw: number;
     sh: number;
     name: string;
+    familia : string;
     dx?: number;
     dy?: number;
     dw?: number;
     dh?: number;
 
-    constructor(name: string, sx: number, sy: number, sw: number, sh: number) {
+    constructor(name: string, familia: string, sx: number, sy: number, sw: number, sh: number) {
         this.name = name;
-        // this.image = new Image()
-        // this.image.src = imageURL;
+        this.familia = familia;
         this.sx = sx;
         this.sy = sy;
         this.sw = sw;
@@ -51,6 +51,7 @@ class Bloco {
 }
 class textura {
     name: string;
+   
     texturaURL: string;
 
     constructor(name: string, texturaURL: string) {
@@ -59,13 +60,22 @@ class textura {
     }
 }
 let blocosArray = [
-    new Bloco("xis",  0, 0, 16, 16),
-    new Bloco("xis",  17, 0, 16, 16),
-    new Bloco("xis",  34, 0, 16, 16),
-    new Bloco("brick",  0, 0, 16, 16),
-    new Bloco("brick_dark",  0, 0, 16, 16),
-    new Bloco("brick_sepia",  0, 0, 16, 16),
-    new Bloco("pencil",  0, 0, 512, 512),
+    // new Bloco("xis",  0, 0, 16, 16),
+    // new Bloco("xis",  17, 0, 16, 16),
+    // new Bloco("xis",  34, 0, 16, 16),
+    // new Bloco("brick",  0, 0, 16, 16),
+    // new Bloco("brick_dark",  0, 0, 16, 16),
+    // new Bloco("brick_sepia",  0, 0, 16, 16),
+    new Bloco("gravel","gravel",  17, 0, 16, 16),
+    new Bloco("gravel","gravel",  0, 17, 16, 16),
+    new Bloco("gravel","gravel",  34, 17, 16, 16),
+    new Bloco("gravel","gravel",  17, 34, 16, 16),
+    new Bloco("gravel","gravel",  17, 17, 16, 16),
+    new Bloco("gravel","gravel",  0, 0, 16, 16),
+
+    new Bloco("gravel","gravel",  34, 0, 16, 16),
+    new Bloco("gravel","gravel",  34, 34, 16, 16),
+    new Bloco("gravel", "gravel", 0, 34, 16, 16),
 
 ]
 let TexturasArray = [
@@ -73,7 +83,7 @@ let TexturasArray = [
     new textura("xis", "00.png"),
     new textura("brick_dark", "17.png"),
     new textura("brick_sepia", "18.png"),
-    new textura("pencil", "pencil.png")
+    new textura("gravel", "gravel.png")
 ];
 async function preloadTextures(texturas: textura[]): Promise<void> {
     const promises = texturas.map((t) => {
@@ -98,6 +108,11 @@ function drawGrid() {
     for (let x = 0; x < canvas.width; x += gridSize) {
         for (let y = 0; y < canvas.height; y += gridSize) {
             ctx.strokeRect(x, y, gridSize, gridSize);
+            //color stroke gray 
+
+            // ctx.strokeStyle = "rgba(78, 73, 73, 0.54)";
+          
+            
         }
     }
 }
@@ -226,16 +241,33 @@ function forno() {
         let cima = bloco.dy! - gridSize
         let baixo = bloco.dy! + gridSize
 
-    
-        const esquerdaVazia = !cordenadas.some((b) => b.dx === esquerda && b.dy === bloco.dy);
-        const direitaVazia = !cordenadas.some((b) => b.dx === direita && b.dy === bloco.dy);
-        const cimaVazia = !cordenadas.some((b) => b.dy === cima && b.dx === bloco.dx);
-        const baixoVazia = !cordenadas.some((b) => b.dy === baixo && b.dx === bloco.dx);
+       
+        const esquerdaVazia = esquerda > 0 && !cordenadas.some((b) => b.dx === esquerda && b.dy === bloco.dy);
+
+        const direitaVazia = direita < canvas.width && !cordenadas.some((b) => b.dx === direita && b.dy === bloco.dy);
+
+        const cimaVazia = cima > 0 && !cordenadas.some((b) => b.dy === cima && b.dx === bloco.dx);
+        const baixoVazia = baixo < canvas.height && !cordenadas.some((b) => b.dy === baixo && b.dx === bloco.dx);
+
 
         switch (true) {
             case esquerdaVazia && direitaVazia && cimaVazia && baixoVazia:
-            coringa = blocosArray[0]; // Exemplo: bloco para todos os lados vazios
+            coringa = blocosArray[4]; // Exemplo: bloco para todos os lados vazios
             break;
+
+            case esquerdaVazia && cimaVazia:
+            coringa = blocosArray[5]; // Exemplo: bloco para esquerda e cima vazios
+            break;
+            case direitaVazia && cimaVazia:
+            coringa = blocosArray[6]; // Exemplo: bloco para esquerda e cima vazios
+            break;
+            case baixoVazia && !direitaVazia && !cimaVazia && esquerdaVazia:
+                coringa = blocosArray[8]; // Exemplo: bloco para esquerda e cima vazios
+                break;
+            case baixoVazia && !esquerdaVazia && !cimaVazia && direitaVazia:	
+                coringa = blocosArray[7]; // Exemplo: bloco para esquerda e cima vazios
+                break;
+
             case esquerdaVazia:
             coringa = blocosArray[1]; // Exemplo: bloco para esquerda vazia
             break;
@@ -243,10 +275,10 @@ function forno() {
             coringa = blocosArray[2]; // Exemplo: bloco para direita vazia
             break;
             case cimaVazia:
-            coringa = blocosArray[3]; // Exemplo: bloco para cima vazia
+            coringa = blocosArray[0]; // Exemplo: bloco para cima vazia
             break;
             case baixoVazia:
-            coringa = blocosArray[4]; // Exemplo: bloco para baixo vazia
+            coringa = blocosArray[3]; // Exemplo: bloco para baixo vazia
             break;
             default:
             coringa = bloco; // Nenhum lado vazio
