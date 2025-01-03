@@ -67,11 +67,11 @@ let blocosArray = [
     new Bloco("gravel", "gravel", 0, 34, 16, 16),
 ];
 let TexturasArray = [
-    new textura("brick", "16.png"),
-    new textura("xis", "00.png"),
-    new textura("brick_dark", "17.png"),
-    new textura("brick_sepia", "18.png"),
-    new textura("gravel", "gravel.png")
+    // new textura("brick", "16.png"),
+    // new textura("xis", "00.png"),
+    // new textura("brick_dark", "17.png"),
+    // new textura("brick_sepia", "18.png"),
+    new textura("gravel", "../assets/textures/gravel.png"),
 ];
 function preloadTextures(texturas) {
     return __awaiter(this, void 0, void 0, function* () {

@@ -79,11 +79,12 @@ let blocosArray = [
 
 ]
 let TexturasArray = [
-    new textura("brick", "16.png"),
-    new textura("xis", "00.png"),
-    new textura("brick_dark", "17.png"),
-    new textura("brick_sepia", "18.png"),
-    new textura("gravel", "gravel.png")
+    // new textura("brick", "16.png"),
+    // new textura("xis", "00.png"),
+    // new textura("brick_dark", "17.png"),
+    // new textura("brick_sepia", "18.png"),
+    new textura("gravel", "../assets/textures/gravel.png"),
+
 ];
 async function preloadTextures(texturas: textura[]): Promise<void> {
     const promises = texturas.map((t) => {
