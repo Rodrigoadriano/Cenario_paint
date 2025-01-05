@@ -56,22 +56,22 @@ let blocosArray = [
     // new Bloco("brick",  0, 0, 16, 16),
     // new Bloco("brick_dark",  0, 0, 16, 16),
     // new Bloco("brick_sepia",  0, 0, 16, 16),
-    new Bloco("gravel", "gravel", 17, 0, 16, 16),
-    new Bloco("gravel", "gravel", 0, 17, 16, 16),
-    new Bloco("gravel", "gravel", 34, 17, 16, 16),
-    new Bloco("gravel", "gravel", 17, 34, 16, 16),
-    new Bloco("gravel", "gravel", 17, 17, 16, 16),
+    new Bloco("gravel", "gravel", 16, 0, 16, 16),
+    new Bloco("gravel", "gravel", 0, 16, 16, 16),
+    new Bloco("gravel", "gravel", 32, 16, 16, 16),
+    new Bloco("gravel", "gravel", 16, 32, 16, 16),
+    new Bloco("gravel", "gravel", 16, 16, 16, 16),
     new Bloco("gravel", "gravel", 0, 0, 16, 16),
-    new Bloco("gravel", "gravel", 34, 0, 16, 16),
-    new Bloco("gravel", "gravel", 34, 34, 16, 16),
-    new Bloco("gravel", "gravel", 0, 34, 16, 16),
+    new Bloco("gravel", "gravel", 32, 0, 16, 16),
+    new Bloco("gravel", "gravel", 32, 32, 16, 16),
+    new Bloco("gravel", "gravel", 0, 32, 16, 16),
 ];
 let TexturasArray = [
     // new textura("brick", "16.png"),
     // new textura("xis", "00.png"),
     // new textura("brick_dark", "17.png"),
     // new textura("brick_sepia", "18.png"),
-    new textura("gravel", "../assets/textures/gravel.png"),
+    new textura("gravel", "../assets/textures/Sprite-0002.png"),
 ];
 function preloadTextures(texturas) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -186,6 +186,7 @@ function forno() {
         let direita = bloco.dx + gridSize;
         let cima = bloco.dy - gridSize;
         let baixo = bloco.dy + gridSize;
+        let familia = bloco.familia;
         const esquerdaVazia = esquerda > 0 && !cordenadas.some((b) => b.dx === esquerda && b.dy === bloco.dy);
         const direitaVazia = direita < canvas.width && !cordenadas.some((b) => b.dx === direita && b.dy === bloco.dy);
         const cimaVazia = cima > 0 && !cordenadas.some((b) => b.dy === cima && b.dx === bloco.dx);
