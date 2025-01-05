@@ -66,7 +66,7 @@ let blocosArray = [
     // new Bloco("xis",  17, 0, 16, 16),
     // new Bloco("xis",  34, 0, 16, 16),
     // new Bloco("brick",  0, 0, 16, 16),
-    // new Bloco("brick_dark",  0, 0, 16, 16),
+    new Bloco("brick_dark","brick_dark",  0, 0, 16, 16,true),
     // new Bloco("brick_sepia",  0, 0, 16, 16),
     new Bloco("cima","gravel",  16, 0, 16, 16, true),
     new Bloco("esquerda","gravel",  0, 16, 16, 16),
@@ -85,7 +85,7 @@ let blocosArray = [
 let TexturasArray = [
     new textura("brick", "../assets/textures/16.png"),
     // new textura("xis", "00.png"),
-    // new textura("brick_dark", "17.png"),
+    new textura("brick_dark", "../assets/textures/17.png"),
     // new textura("brick_sepia", "18.png"),
     new textura("gravel", "../assets/textures/Sprite-0002.png"),
 
@@ -291,7 +291,7 @@ function forno() {
                 coringa = getBloco("baixo") 
             break;
             default:
-            coringa = bloco; // Nenhum lado vazio
+            coringa = getBloco("default") ;
             break;
         }
   
