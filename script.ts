@@ -15,7 +15,7 @@ let deletar = false;
 let clicked = false;
 let lastDx: number | null = null;
 let lastDy: number | null = null;
-
+let permitido: boolean;
 if (canvas) {
     if (ctx) {
         ctx.imageSmoothingEnabled = false;
@@ -67,6 +67,8 @@ let blocosArray = [
     // new Bloco("xis",  34, 0, 16, 16),
     // new Bloco("brick",  0, 0, 16, 16),
     new Bloco("brick_dark","brick_dark",  0, 0, 16, 16,true),
+    new Bloco("default","brick",  0, 0, 16, 16, true),
+
     // new Bloco("brick_sepia",  0, 0, 16, 16),
     new Bloco("cima","gravel",  16, 0, 16, 16, true),
     new Bloco("esquerda","gravel",  0, 16, 16, 16),
@@ -74,11 +76,19 @@ let blocosArray = [
     new Bloco("baixo","gravel",  16, 32, 16, 16),
     new Bloco("default","gravel",  16, 16, 16, 16),
     new Bloco("esquerda_cima","gravel",  0, 0, 16, 16),
-    new Bloco("default","brick",  0, 0, 16, 16, true),
-
     new Bloco("direita_cima","gravel",  32, 0, 16, 16),
     new Bloco("esquerda_baixo","gravel",  32, 32, 16, 16),
     new Bloco("direita_baixo", "gravel", 0, 32, 16, 16),
+
+    new Bloco("cima","gravel2",  17, 0, 16, 16, true),
+    new Bloco("esquerda","gravel2",  0, 17, 16, 16),
+    new Bloco("direita","gravel2",  34, 17, 16, 16),
+    new Bloco("baixo","gravel2",  17, 34, 16, 16),
+    new Bloco("default","gravel2",  17, 17, 16, 16),
+    new Bloco("esquerda_cima","gravel2",  0, 0, 16, 16),
+    new Bloco("direita_cima","gravel2",  34, 0, 16, 16),
+    new Bloco("esquerda_baixo","gravel2",  34, 34, 16, 16),
+    new Bloco("direita_baixo", "gravel2", 0, 34, 16, 16),
 
 
 ]
@@ -88,6 +98,8 @@ let TexturasArray = [
     new textura("brick_dark", "../assets/textures/17.png"),
     // new textura("brick_sepia", "18.png"),
     new textura("gravel", "../assets/textures/Sprite-0002.png"),
+    new textura("gravel2", "../assets/textures/gravel.png"),
+
 
 ];
 async function preloadTextures(texturas: textura[]): Promise<void> {
@@ -204,8 +216,9 @@ function paint(event: MouseEvent) {
     const dx = Math.floor(x / gridSize) * gridSize;
     const dy = Math.floor(y / gridSize) * gridSize;
 
-    if (dx !== lastDx || dy !== lastDy) {
+    if (dx !== lastDx || dy !== lastDy || permitido) {
         // Atualizar as últimas posições processadas
+ 
         lastDx = dx;
         lastDy = dy;
 
@@ -230,6 +243,8 @@ function paint(event: MouseEvent) {
     }
         if(!deletar){
             cordenadas.push({ ...Blocoselected! });
+            permitido = false;
+            console.log("Permitido agora é false")
              
         }
 
@@ -353,6 +368,7 @@ canvas.addEventListener('mousedown', (event) => {
     } else if (event.button === 2) { // Botão direito
         deletar = true;
         clicked = true;
+        permitido = true;
         paint(event);
     }
 
