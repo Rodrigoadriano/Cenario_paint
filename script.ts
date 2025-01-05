@@ -66,20 +66,20 @@ let blocosArray = [
     // new Bloco("brick",  0, 0, 16, 16),
     // new Bloco("brick_dark",  0, 0, 16, 16),
     // new Bloco("brick_sepia",  0, 0, 16, 16),
-    new Bloco("gravel","gravel",  16, 0, 16, 16),
-    new Bloco("gravel","gravel",  0, 16, 16, 16),
-    new Bloco("gravel","gravel",  32, 16, 16, 16),
-    new Bloco("gravel","gravel",  16, 32, 16, 16),
-    new Bloco("gravel","gravel",  16, 16, 16, 16),
-    new Bloco("gravel","gravel",  0, 0, 16, 16),
+    new Bloco("cima","gravel",  16, 0, 16, 16),
+    new Bloco("esquerda","gravel",  0, 16, 16, 16),
+    new Bloco("direita","gravel",  32, 16, 16, 16),
+    new Bloco("baixo","gravel",  16, 32, 16, 16),
+    new Bloco("default","gravel",  16, 16, 16, 16),
+    new Bloco("esquerda_cima","gravel",  0, 0, 16, 16),
 
-    new Bloco("gravel","gravel",  32, 0, 16, 16),
-    new Bloco("gravel","gravel",  32, 32, 16, 16),
-    new Bloco("gravel", "gravel", 0, 32, 16, 16),
+    new Bloco("direita_cima","gravel",  32, 0, 16, 16),
+    new Bloco("esquerda_baixo","gravel",  32, 32, 16, 16),
+    new Bloco("direita_baixo", "gravel", 0, 32, 16, 16),
 
 ]
 let TexturasArray = [
-    // new textura("brick", "16.png"),
+    // new textura("brick", "../assets/textures/16.png"),
     // new textura("xis", "00.png"),
     // new textura("brick_dark", "17.png"),
     // new textura("brick_sepia", "18.png"),
@@ -128,7 +128,7 @@ function seletorBlocos(bloco: Bloco[], texturas: textura[]) {
         div.id = (index + 1).toString(); // Define o ID como o índice + 1
 
         // Configura a textura se existir
-        const texture = loadedTextures[bloco.name];
+        const texture = loadedTextures[bloco.familia];
         if (texture) {
             div.style.backgroundImage = `url(${texture.src})`;
             div.style.backgroundSize = `${texture.width * (64 / bloco.sw)}px ${texture.height * (64 / bloco.sh)}px`;
@@ -156,7 +156,7 @@ function seletorBlocos(bloco: Bloco[], texturas: textura[]) {
     });
 }
 function DrawBloco(B1: Bloco, texturas: textura[]) {
-        const texture = loadedTextures[B1.name];
+        const texture = loadedTextures[B1.familia];
         if (texture) {
             ctx.drawImage(
                 texture,
@@ -170,7 +170,7 @@ function DrawBloco(B1: Bloco, texturas: textura[]) {
                 B1.dh!
             );
         } else {
-            console.error(`Textura não encontrada para: ${B1.name}`);
+            console.error(`Textura não encontrada para: ${B1.familia}`);
         }
 }
 function render() {
@@ -237,11 +237,11 @@ function forno() {
 
     cordenadas.forEach((bloco) => {
 
-        let esquerda = bloco.dx! - gridSize 
-        let direita = bloco.dx! + gridSize
-        let cima = bloco.dy! - gridSize
-        let baixo = bloco.dy! + gridSize
-        let familia = bloco.familia;
+        const  esquerda = bloco.dx! - gridSize 
+        const  direita = bloco.dx! + gridSize
+        const  cima = bloco.dy! - gridSize
+        const  baixo = bloco.dy! + gridSize
+        const  familia = bloco.familia;
 
        
         const esquerdaVazia = esquerda > 0 && !cordenadas.some((b) => b.dx === esquerda && b.dy === bloco.dy);
@@ -251,36 +251,38 @@ function forno() {
         const cimaVazia = cima > 0 && !cordenadas.some((b) => b.dy === cima && b.dx === bloco.dx);
         const baixoVazia = baixo < canvas.height && !cordenadas.some((b) => b.dy === baixo && b.dx === bloco.dx);
 
+        function getBloco(name: string) {
+            return blocosArray.find(item => item.familia === familia && item.name === name) || null;
+        }
 
         switch (true) {
             case esquerdaVazia && direitaVazia && cimaVazia && baixoVazia:
-            coringa = blocosArray[4]; // Exemplo: bloco para todos os lados vazios
+            coringa = getBloco("default") ;
             break;
-
             case esquerdaVazia && cimaVazia:
-            coringa = blocosArray[5]; // Exemplo: bloco para esquerda e cima vazios
+            coringa = getBloco("esquerda_cima") 
             break;
             case direitaVazia && cimaVazia:
-            coringa = blocosArray[6]; // Exemplo: bloco para esquerda e cima vazios
+                coringa = getBloco("direita_cima") 
             break;
             case baixoVazia && !direitaVazia && !cimaVazia && esquerdaVazia:
-                coringa = blocosArray[8]; // Exemplo: bloco para esquerda e cima vazios
+                coringa = getBloco("direita_baixo") 
                 break;
             case baixoVazia && !esquerdaVazia && !cimaVazia && direitaVazia:	
-                coringa = blocosArray[7]; // Exemplo: bloco para esquerda e cima vazios
+            coringa = getBloco("esquerda_baixo") 
                 break;
 
             case esquerdaVazia:
-            coringa = blocosArray[1]; // Exemplo: bloco para esquerda vazia
+                coringa = getBloco("esquerda") 
             break;
             case direitaVazia:
-            coringa = blocosArray[2]; // Exemplo: bloco para direita vazia
+                coringa = getBloco("direita") 
             break;
             case cimaVazia:
-            coringa = blocosArray[0]; // Exemplo: bloco para cima vazia
+                coringa = getBloco("cima") 
             break;
             case baixoVazia:
-            coringa = blocosArray[3]; // Exemplo: bloco para baixo vazia
+                coringa = getBloco("baixo") 
             break;
             default:
             coringa = bloco; // Nenhum lado vazio
@@ -292,11 +294,13 @@ function forno() {
       
             
 
-        coringa.dx = bloco.dx;
-        coringa.dy = bloco.dy;
-        coringa.dh = gridSize;
-        coringa.dw = gridSize;
+        if (coringa) {
+            coringa.dx = bloco.dx;
+            coringa.dy = bloco.dy;
+            coringa.dh = gridSize;
+            coringa.dw = gridSize;
             forma.push({ ...coringa });
+        }
 
 
   
