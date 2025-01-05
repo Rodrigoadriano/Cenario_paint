@@ -33,13 +33,15 @@ class Bloco {
     sh: number;
     name: string;
     familia : string;
+    selectable: boolean;
     dx?: number;
     dy?: number;
     dw?: number;
     dh?: number;
 
-    constructor(name: string, familia: string, sx: number, sy: number, sw: number, sh: number) {
+    constructor(name: string, familia: string, sx: number, sy: number, sw: number, sh: number, selectable: boolean = false) {
         this.name = name;
+        this.selectable = selectable;
         this.familia = familia;
         this.sx = sx;
         this.sy = sy;
@@ -66,20 +68,22 @@ let blocosArray = [
     // new Bloco("brick",  0, 0, 16, 16),
     // new Bloco("brick_dark",  0, 0, 16, 16),
     // new Bloco("brick_sepia",  0, 0, 16, 16),
-    new Bloco("cima","gravel",  16, 0, 16, 16),
+    new Bloco("cima","gravel",  16, 0, 16, 16, true),
     new Bloco("esquerda","gravel",  0, 16, 16, 16),
     new Bloco("direita","gravel",  32, 16, 16, 16),
     new Bloco("baixo","gravel",  16, 32, 16, 16),
     new Bloco("default","gravel",  16, 16, 16, 16),
     new Bloco("esquerda_cima","gravel",  0, 0, 16, 16),
+    new Bloco("default","brick",  0, 0, 16, 16, true),
 
     new Bloco("direita_cima","gravel",  32, 0, 16, 16),
     new Bloco("esquerda_baixo","gravel",  32, 32, 16, 16),
     new Bloco("direita_baixo", "gravel", 0, 32, 16, 16),
 
+
 ]
 let TexturasArray = [
-    // new textura("brick", "../assets/textures/16.png"),
+    new textura("brick", "../assets/textures/16.png"),
     // new textura("xis", "00.png"),
     // new textura("brick_dark", "17.png"),
     // new textura("brick_sepia", "18.png"),
@@ -123,21 +127,23 @@ function seletorBlocos(bloco: Bloco[], texturas: textura[]) {
 
     // Itera sobre o array de blocos
     bloco.forEach((bloco, index) => {
-        const div = document.createElement('div'); // Cria uma nova div
-        div.className = 'blocos'; // Adiciona a classe 'blocos'
-        div.id = (index + 1).toString(); // Define o ID como o índice + 1
+        if (bloco.selectable) {
+            console.log(bloco.selectable);
+            const div = document.createElement('div'); // Cria uma nova div
+            div.className = 'blocos'; // Adiciona a classe 'blocos'
+            div.id = (index + 1).toString(); // Define o ID como o índice + 1
 
-        // Configura a textura se existir
-        const texture = loadedTextures[bloco.familia];
-        if (texture) {
+            // Configura a textura se existir
+            const texture = loadedTextures[bloco.familia];
+            if (texture) {
             div.style.backgroundImage = `url(${texture.src})`;
             div.style.backgroundSize = `${texture.width * (64 / bloco.sw)}px ${texture.height * (64 / bloco.sh)}px`;
             div.style.backgroundPosition = `-${bloco.sx * (64 / bloco.sw)}px -${bloco.sy * (64 / bloco.sh)}px`;
             div.style.backgroundRepeat = 'no-repeat';
-        }
+            }
 
-        // Adiciona o evento de clique ao criar o bloco
-        div.addEventListener('click', (event: MouseEvent) => {
+            // Adiciona o evento de clique ao criar o bloco
+            div.addEventListener('click', (event: MouseEvent) => {
             const target = event.currentTarget as HTMLDivElement; // Garante que o target é um HTMLDivElement
             const clickedId: number = Number(target.id) - 1; // Obtém o ID do elemento clicado
             
@@ -149,11 +155,11 @@ function seletorBlocos(bloco: Bloco[], texturas: textura[]) {
             
             // Define o bloco selecionado
             Blocoselected = blocosArray[clickedId];
-        });
+            });
 
-        // Adiciona a div ao elemento pai
-        blocoContainer.appendChild(div);
-    });
+            // Adiciona a div ao elemento pai
+            blocoContainer.appendChild(div);
+    }});
 }
 function DrawBloco(B1: Bloco, texturas: textura[]) {
         const texture = loadedTextures[B1.familia];
@@ -252,7 +258,7 @@ function forno() {
         const baixoVazia = baixo < canvas.height && !cordenadas.some((b) => b.dy === baixo && b.dx === bloco.dx);
 
         function getBloco(name: string) {
-            return blocosArray.find(item => item.familia === familia && item.name === name) || null;
+            return blocosArray.find(item => item.familia === familia && item.name === name) || bloco;
         }
 
         switch (true) {
