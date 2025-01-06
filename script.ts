@@ -101,7 +101,7 @@ let blocosArray = [
     new Bloco("mix","mix",  32, 0, 16, 16),
 
 
-    new Bloco("mix","escada",  0, 0, 16, 16,true,1)
+    new Bloco("default","escada",  0, 0, 16, 16,true,1)
 
     
   
@@ -169,6 +169,7 @@ function seletorBlocos(bloco: Bloco[], texturas: textura[]) {
             div.style.backgroundSize = `${texture.width * (64 / bloco.sw)}px ${texture.height * (64 / bloco.sh)}px`;
             div.style.backgroundPosition = `-${bloco.sx * (64 / bloco.sw)}px -${bloco.sy * (64 / bloco.sh)}px`;
             div.style.backgroundRepeat = 'no-repeat';
+            div.style.backgroundColor = 'transparent';
             }
 
             // Adiciona o evento de clique ao criar o bloco

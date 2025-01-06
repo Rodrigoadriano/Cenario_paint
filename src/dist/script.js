@@ -35,10 +35,11 @@ canvas.addEventListener('contextmenu', (event) => {
     event.preventDefault();
 });
 class Bloco {
-    constructor(name, familia, sx, sy, sw, sh, selectable = false) {
+    constructor(name, familia, sx, sy, sw, sh, selectable = false, layer = 0) {
         this.name = name;
         this.selectable = selectable;
         this.familia = familia;
+        this.layer = layer;
         this.sx = sx;
         this.sy = sy;
         this.sw = sw;
@@ -83,6 +84,8 @@ let blocosArray = [
     new Bloco("mix", "mix", 16, 16, 16, 16),
     new Bloco("mix", "mix", 0, 0, 16, 16),
     new Bloco("mix", "mix", 32, 0, 16, 16),
+    new Bloco("mix", "mix", 32, 0, 16, 16),
+    new Bloco("default", "escada", 0, 0, 16, 16, true, 1)
 ];
 let TexturasArray = [
     new textura("brick", "../assets/textures/16.png"),
@@ -92,6 +95,7 @@ let TexturasArray = [
     new textura("gravel", "../assets/textures/Sprite-0002.png"),
     new textura("gravel2", "../assets/textures/gravel.png"),
     new textura("mix", "../assets/textures/bloco_pedra.png"),
+    new textura("escada", "../assets/textures/escada.png"),
 ];
 function preloadTextures(texturas) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -138,6 +142,7 @@ function seletorBlocos(bloco, texturas) {
                 div.style.backgroundSize = `${texture.width * (64 / bloco.sw)}px ${texture.height * (64 / bloco.sh)}px`;
                 div.style.backgroundPosition = `-${bloco.sx * (64 / bloco.sw)}px -${bloco.sy * (64 / bloco.sh)}px`;
                 div.style.backgroundRepeat = 'no-repeat';
+                div.style.backgroundColor = 'transparent';
             }
             // Adiciona o evento de clique ao criar o bloco
             div.addEventListener('click', (event) => {
@@ -190,8 +195,11 @@ function paint(event) {
             Blocoselected.dy = dy;
             Blocoselected.dh = gridSize;
             Blocoselected.dw = gridSize;
-            // Verificar se já existe um bloco nas mesmas coordenadas
-            const index = cordenadas.findIndex((Bloco) => Bloco.dx === Blocoselected.dx && Bloco.dy === Blocoselected.dy);
+            // Verificar se já existe um bloco nas mesmas coordenadas nas mesma layer
+            const index = cordenadas.findIndex((Bloco) => Blocoselected &&
+                Bloco.dx === Blocoselected.dx &&
+                Bloco.dy === Blocoselected.dy &&
+                Bloco.layer === Blocoselected.layer);
             if (index !== -1) {
                 // Existe: remove o bloco
                 cordenadas.splice(index, 1);
