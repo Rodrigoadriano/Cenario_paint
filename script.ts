@@ -90,6 +90,15 @@ let blocosArray = [
     new Bloco("esquerda_baixo","gravel2",  34, 34, 16, 16),
     new Bloco("direita_baixo", "gravel2", 0, 34, 16, 16),
 
+    new Bloco("mix","mix",  16, 0, 16, 16, true),
+    new Bloco("mix","mix",  0, 16, 16, 16),
+    new Bloco("mix","mix",  32, 16, 16, 16),
+    new Bloco("mix","mix",  16, 16, 16, 16),
+    new Bloco("mix","mix",  0, 0, 16, 16),
+    new Bloco("mix","mix",  32, 0, 16, 16),
+
+    
+  
 
 ]
 let TexturasArray = [
@@ -99,6 +108,7 @@ let TexturasArray = [
     // new textura("brick_sepia", "18.png"),
     new textura("gravel", "../assets/textures/Sprite-0002.png"),
     new textura("gravel2", "../assets/textures/gravel.png"),
+    new textura("mix", "../assets/textures/bloco_pedra.png"),
 
 
 ];
@@ -158,7 +168,7 @@ function seletorBlocos(bloco: Bloco[], texturas: textura[]) {
             div.addEventListener('click', (event: MouseEvent) => {
             const target = event.currentTarget as HTMLDivElement; // Garante que o target é um HTMLDivElement
             const clickedId: number = Number(target.id) - 1; // Obtém o ID do elemento clicado
-            
+            permitido= true;
             // Remove a borda de todos os blocos
             document.querySelectorAll('.blocos').forEach(bloco => (bloco as HTMLDivElement).style.border = 'none');
             
@@ -276,7 +286,18 @@ function forno() {
             return blocosArray.find(item => item.familia === familia && item.name === name) || bloco;
         }
 
+        function getRandomBloco() {
+            const familyBlocos = blocosArray.filter(item => item.familia === familia);
+            const random = Math.floor(Math.random() * familyBlocos.length);
+            return familyBlocos[random] || bloco;
+        }
+
         switch (true) {
+            case bloco.name === "mix":
+            //get random block 
+            coringa = getRandomBloco();
+            break
+
             case esquerdaVazia && direitaVazia && cimaVazia && baixoVazia:
             coringa = getBloco("default") ;
             break;
