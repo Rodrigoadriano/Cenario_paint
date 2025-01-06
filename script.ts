@@ -38,6 +38,7 @@ class Bloco {
     dy?: number;
     dw?: number;
     dh?: number;
+    layer: number = 0;
 
     constructor(name: string, familia: string, sx: number, sy: number, sw: number, sh: number, selectable: boolean = false) {
         this.name = name;
