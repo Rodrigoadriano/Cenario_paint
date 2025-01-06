@@ -226,7 +226,7 @@ function render() {
 }
 
 
-function paint(event: MouseEvent) {
+function CordinateManager(event: MouseEvent) {
 
     const rect = canvas.getBoundingClientRect();
     const x = (event.clientX - rect.left) / Zoom;
@@ -397,12 +397,12 @@ canvas.addEventListener('mousedown', (event) => {
     if (event.button === 0) { // Botão esquerdo
         deletar = false;
         clicked = true;
-        paint(event);
+        CordinateManager(event);
     } else if (event.button === 2) { // Botão direito
         deletar = true;
         clicked = true;
         permitido = true;
-        paint(event);
+        CordinateManager(event);
     }
 
     if (event.button === 1) { // Middle mouse button
@@ -430,7 +430,7 @@ canvasContainer.addEventListener('mousemove', (event) => {
     }
     if (!clicked) {
         return;}
-    paint(event);
+    CordinateManager(event);
 
 });
 canvasContainer.addEventListener('mouseleave', () => {

@@ -180,7 +180,7 @@ function render() {
     });
     forma = [];
 }
-function paint(event) {
+function CordinateManager(event) {
     const rect = canvas.getBoundingClientRect();
     const x = (event.clientX - rect.left) / Zoom;
     const y = (event.clientY - rect.top) / Zoom;
@@ -304,13 +304,13 @@ canvas.addEventListener('mousedown', (event) => {
     if (event.button === 0) { // Botão esquerdo
         deletar = false;
         clicked = true;
-        paint(event);
+        CordinateManager(event);
     }
     else if (event.button === 2) { // Botão direito
         deletar = true;
         clicked = true;
         permitido = true;
-        paint(event);
+        CordinateManager(event);
     }
     if (event.button === 1) { // Middle mouse button
         isDragging = true;
@@ -337,7 +337,7 @@ canvasContainer.addEventListener('mousemove', (event) => {
     if (!clicked) {
         return;
     }
-    paint(event);
+    CordinateManager(event);
 });
 canvasContainer.addEventListener('mouseleave', () => {
     isDragging = false;
