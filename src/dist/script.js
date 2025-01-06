@@ -254,9 +254,9 @@ function forno() {
             case cimaVazia:
                 coringa = getBloco("cima");
                 break;
-            case baixoVazia:
-                coringa = getBloco("baixo");
-                break;
+            // case baixoVazia:
+            //     coringa = getBloco("baixo") 
+            // break;
             default:
                 coringa = getBloco("default");
                 break;
