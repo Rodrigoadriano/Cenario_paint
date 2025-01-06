@@ -38,12 +38,13 @@ class Bloco {
     dy?: number;
     dw?: number;
     dh?: number;
-    layer: number = 0;
+    layer: number;
 
-    constructor(name: string, familia: string, sx: number, sy: number, sw: number, sh: number, selectable: boolean = false) {
+    constructor(name: string, familia: string, sx: number, sy: number, sw: number, sh: number, selectable: boolean = false, layer:number = 0) {
         this.name = name;
         this.selectable = selectable;
         this.familia = familia;
+        this.layer = layer;
         this.sx = sx;
         this.sy = sy;
         this.sw = sw;
@@ -97,6 +98,8 @@ let blocosArray = [
     new Bloco("mix","mix",  16, 16, 16, 16),
     new Bloco("mix","mix",  0, 0, 16, 16),
     new Bloco("mix","mix",  32, 0, 16, 16),
+    new Bloco("mix","mix",  32, 0, 16, 16),
+    new Bloco("mix","mix",  32, 0, 16, 16)
 
     
   
