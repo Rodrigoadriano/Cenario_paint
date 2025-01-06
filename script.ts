@@ -99,7 +99,9 @@ let blocosArray = [
     new Bloco("mix","mix",  0, 0, 16, 16),
     new Bloco("mix","mix",  32, 0, 16, 16),
     new Bloco("mix","mix",  32, 0, 16, 16),
-    new Bloco("mix","mix",  32, 0, 16, 16)
+
+
+    new Bloco("mix","escada",  0, 0, 16, 16,true,1)
 
     
   
@@ -113,6 +115,7 @@ let TexturasArray = [
     new textura("gravel", "../assets/textures/Sprite-0002.png"),
     new textura("gravel2", "../assets/textures/gravel.png"),
     new textura("mix", "../assets/textures/bloco_pedra.png"),
+    new textura("escada", "../assets/textures/escada.png"),
 
 
 ];
