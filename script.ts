@@ -240,9 +240,13 @@ function paint(event: MouseEvent) {
             Blocoselected.dh = gridSize;
             Blocoselected.dw = gridSize;
 
-        // Verificar se já existe um bloco nas mesmas coordenadas
+        // Verificar se já existe um bloco nas mesmas coordenadas nas mesma layer
         const index = cordenadas.findIndex(
-            (Bloco) => Bloco.dx === Blocoselected!.dx && Bloco.dy === Blocoselected!.dy
+            (Bloco) =>
+                Blocoselected &&
+                Bloco.dx === Blocoselected.dx &&
+                Bloco.dy === Blocoselected.dy &&
+                Bloco.layer === Blocoselected.layer
         );
 
         if (index !== -1) {
