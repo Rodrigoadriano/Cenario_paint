@@ -136,6 +136,7 @@ async function preloadTextures(texturas: textura[]): Promise<void> {
     });
 
     await Promise.all(promises); // Aguarda todas as Promises serem resolvidas
+    console.log('Texturas carregadas:', loadedTextures);
 }
 
 function drawGrid() {
@@ -157,7 +158,6 @@ function seletorBlocos(bloco: Bloco[], texturas: textura[]) {
     // Itera sobre o array de blocos
     bloco.forEach((bloco, index) => {
         if (bloco.selectable) {
-            console.log(bloco.selectable);
             const div = document.createElement('div'); // Cria uma nova div
             div.className = 'blocos'; // Adiciona a classe 'blocos'
             div.id = (index + 1).toString(); // Define o ID como o índice + 1
@@ -275,7 +275,6 @@ function CordinateManager(event: MouseEvent) {
       
     }
     permitido = false;
-    console.log('Cordenadas:',cordenadas)
 
     render();
 }

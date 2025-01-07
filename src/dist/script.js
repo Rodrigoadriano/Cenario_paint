@@ -114,6 +114,7 @@ function preloadTextures(texturas) {
             return Promise.resolve(); // Se já está carregada, retorna uma Promise resolvida
         });
         yield Promise.all(promises); // Aguarda todas as Promises serem resolvidas
+        console.log('Texturas carregadas:', loadedTextures);
     });
 }
 function drawGrid() {
@@ -131,7 +132,6 @@ function seletorBlocos(bloco, texturas) {
     // Itera sobre o array de blocos
     bloco.forEach((bloco, index) => {
         if (bloco.selectable) {
-            console.log(bloco.selectable);
             const div = document.createElement('div'); // Cria uma nova div
             div.className = 'blocos'; // Adiciona a classe 'blocos'
             div.id = (index + 1).toString(); // Define o ID como o índice + 1
@@ -216,7 +216,6 @@ function CordinateManager(event) {
         }
     }
     permitido = false;
-    console.log('Cordenadas:', cordenadas);
     render();
 }
 function forno() {
