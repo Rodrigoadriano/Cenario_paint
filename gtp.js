@@ -134,3 +134,98 @@ tilesetImage.onload = () => {
         bloco.draw(ctx, 100, 100); // Desenha em (100, 100)
     }
 };
+
+
+//////////terceira ideia, array para sprites maiores
+
+class Bloco {
+    constructor(linhas, colunas, tileWidth, tileHeight) {
+        this.linhas = linhas; // Array com as linhas ocupadas pelo bloco
+        this.colunas = colunas; // Array com as colunas ocupadas pelo bloco
+        this.width = tileWidth * colunas.length; // Largura total do bloco
+        this.height = tileHeight * linhas.length; // Altura total do bloco
+        this.x = colunas.map(coluna => (coluna - 1) * tileWidth); // Coordenadas X no tileset
+        this.y = linhas.map(linha => (linha - 1) * tileHeight); // Coordenadas Y no tileset
+    }
+
+    draw(ctx, targetX, targetY) {
+        // Percorre cada célula do bloco e desenha no canvas
+        this.y.forEach((yCoord, i) => {
+            this.x.forEach((xCoord, j) => {
+                ctx.drawImage(
+                    tilesetImage, // A imagem do tileset carregada
+                    xCoord, yCoord, this.width / this.colunas.length, this.height / this.linhas.length, // Recorte do tileset
+                    targetX + j * (this.width / this.colunas.length), targetY + i * (this.height / this.linhas.length), // Posição no canvas
+                    this.width / this.colunas.length, this.height / this.linhas.length // Tamanho do bloco
+                );
+            });
+        });
+    }
+}
+
+// Gerenciador para armazenar e buscar blocos
+class GerenciadorDeBlocos {
+    constructor(blocos) {
+        this.blocos = []; // Array de blocos
+        blocos.forEach(bloco => {
+            this.blocos.push(bloco); // Adiciona cada bloco ao array
+        });
+    }
+
+    buscar_bloco(linha, coluna) {
+        // Encontra o bloco que ocupa a linha e coluna especificada
+        return this.blocos.find(
+            bloco => bloco.linhas.includes(linha) && bloco.colunas.includes(coluna)
+        );
+    }
+
+    buscar_sprite(linhas, colunas) {
+        // Encontra o bloco que ocupa as linhas e colunas especificadas
+        return this.blocos.find(
+            bloco =>
+                linhas.every(l => bloco.linhas.includes(l)) &&
+                colunas.every(c => bloco.colunas.includes(c))
+        );
+    }
+}
+
+function gerarBlocosComLinhasEColunas(tilesetWidth, tilesetHeight, tileWidth, tileHeight) {
+    const blocos = [];
+    const linhas = tilesetHeight / tileHeight; // Número de linhas
+    const colunas = tilesetWidth / tileWidth; // Número de colunas
+
+    for (let linha = 1; linha <= linhas; linha++) {
+        for (let coluna = 1; coluna <= colunas; coluna++) {
+            blocos.push(new Bloco([linha], [coluna], tileWidth, tileHeight)); // Bloco padrão 1x1
+        }
+    }
+
+    return blocos;
+}
+
+// Exemplo de uso
+const tilesetImage = new Image();
+tilesetImage.src = "tileset.png"; // Caminho para sua imagem
+
+tilesetImage.onload = () => {
+    const blocos = gerarBlocosComLinhasEColunas(
+        tilesetImage.width,
+        tilesetImage.height,
+        16, // Largura do bloco
+        16  // Altura do bloco
+    );
+
+    const gerenciador = new GerenciadorDeBlocos(blocos);
+
+    // Desenhar um bloco 1x1 no canvas
+    const bloco1 = gerenciador.buscar_bloco(1, 2); // Linha 1, Coluna 2
+    if (bloco1) {
+        bloco1.draw(ctx, 100, 100); // Desenha em (100, 100)
+    }
+
+    // Desenhar um bloco maior 2x3 no canvas
+    const bloco2 = gerenciador.buscar_sprite([2], [5, 6, 7]); // Linha 2, Colunas 5, 6, 7
+    if (bloco2) {
+        bloco2.draw(ctx, 200, 200); // Desenha em (200, 200)
+    }
+};
