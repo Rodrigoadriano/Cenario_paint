@@ -260,10 +260,10 @@ function CordinateManager(event: MouseEvent) {
         }
 
         cordenadas.push({ ...Blocoselected! });
-        permitido = false;
+        
     }else{
         // Se for deletar, remove o bloco na posição clicada
-        const index = cordenadas.findIndex(
+        const index =  cordenadas.length - 1 - cordenadas.slice().reverse().findIndex(
             (Bloco) =>
                 Bloco.dx === dx &&
                 Bloco.dy === dy
@@ -272,9 +272,10 @@ function CordinateManager(event: MouseEvent) {
         if (index !== -1) {
             cordenadas.splice(index, 1);
         }
+      
     }
-
-  
+    permitido = false;
+    console.log('Cordenadas:',cordenadas)
 
     render();
 }
@@ -398,15 +399,17 @@ canvas.addEventListener('wheel', (event: WheelEvent) => {
 });
 canvas.addEventListener('mousedown', (event) => {
     if (event.button === 0) { // Botão esquerdo
-        deletar = false;
+        deletar = false;   
+        permitido = true;
         clicked = true;
         CordinateManager(event);
     } else if (event.button === 2) { // Botão direito
-        deletar = true;
-        clicked = true;
+        deletar = true;       
         permitido = true;
+        clicked = true; 
         CordinateManager(event);
     }
+
 
     if (event.button === 1) { // Middle mouse button
         isDragging = true;

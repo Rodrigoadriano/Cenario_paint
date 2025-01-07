@@ -206,16 +206,17 @@ function CordinateManager(event) {
             cordenadas.splice(index, 1);
         }
         cordenadas.push(Object.assign({}, Blocoselected));
-        permitido = false;
     }
     else {
         // Se for deletar, remove o bloco na posição clicada
-        const index = cordenadas.findIndex((Bloco) => Bloco.dx === dx &&
+        const index = cordenadas.length - 1 - cordenadas.slice().reverse().findIndex((Bloco) => Bloco.dx === dx &&
             Bloco.dy === dy);
         if (index !== -1) {
             cordenadas.splice(index, 1);
         }
     }
+    permitido = false;
+    console.log('Cordenadas:', cordenadas);
     render();
 }
 function forno() {
@@ -308,13 +309,14 @@ canvas.addEventListener('wheel', (event) => {
 canvas.addEventListener('mousedown', (event) => {
     if (event.button === 0) { // Botão esquerdo
         deletar = false;
+        permitido = true;
         clicked = true;
         CordinateManager(event);
     }
     else if (event.button === 2) { // Botão direito
         deletar = true;
-        clicked = true;
         permitido = true;
+        clicked = true;
         CordinateManager(event);
     }
     if (event.button === 1) { // Middle mouse button
