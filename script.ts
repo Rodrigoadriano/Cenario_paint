@@ -214,7 +214,7 @@ function render() {
 
     drawGrid();
     forno();
-    forma.forEach((bloco) => {
+    forma.sort((a, b) => a.layer - b.layer).forEach((bloco) => {
      
         DrawBloco(bloco, TexturasArray);
     });
@@ -282,7 +282,7 @@ function CordinateManager(event: MouseEvent) {
 function forno() {
     let coringa: Bloco | null = null;
 
-    cordenadas.forEach((bloco) => {
+    cordenadas.sort((a, b) => a.layer - b.layer).forEach((bloco) => {
 
         const  esquerda = bloco.dx! - gridSize 
         const  direita = bloco.dx! + gridSize
