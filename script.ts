@@ -214,8 +214,6 @@ function render() {
 
     drawGrid();
     forno();
-// Clear the canvas
-
     forma.forEach((bloco) => {
      
         DrawBloco(bloco, TexturasArray);
@@ -227,53 +225,58 @@ function render() {
 
 
 function CordinateManager(event: MouseEvent) {
-
     const rect = canvas.getBoundingClientRect();
     const x = (event.clientX - rect.left) / Zoom;
     const y = (event.clientY - rect.top) / Zoom;
     const dx = Math.floor(x / gridSize) * gridSize;
     const dy = Math.floor(y / gridSize) * gridSize;
 
-    if (dx !== lastDx || dy !== lastDy || permitido) {
-        // Atualizar as últimas posições processadas
- 
-        lastDx = dx;
-        lastDy = dy;
+    // Se não houve mudança nas coordenadas, retorna
+    if (dx === lastDx && dy === lastDy && !permitido) {
+        return;
+    }
 
-    
-        if (Blocoselected) {
-            Blocoselected.dx = dx;
-            Blocoselected.dy = dy;
-            Blocoselected.dh = gridSize;
-            Blocoselected.dw = gridSize;
+    // Atualiza últimas posições
+    lastDx = dx;
+    lastDy = dy;
 
-        // Verificar se já existe um bloco nas mesmas coordenadas nas mesma layer
+    //Se tiver um bloco selecionado(seletor), E não for deletar completa as informações faltantes e faz o push no array
+    if (Blocoselected && !deletar) {
+        Blocoselected.dx = dx;
+        Blocoselected.dy = dy;
+        Blocoselected.dh = gridSize;
+        Blocoselected.dw = gridSize;
+
+        // Remove bloco existente na mesma posição se houver
         const index = cordenadas.findIndex(
             (Bloco) =>
-                Blocoselected &&
-                Bloco.dx === Blocoselected.dx &&
-                Bloco.dy === Blocoselected.dy &&
-                Bloco.layer === Blocoselected.layer
+                Bloco.dx === dx &&
+                Bloco.dy === dy &&
+                Bloco.layer === Blocoselected!.layer
         );
 
         if (index !== -1) {
-            // Existe: remove o bloco
             cordenadas.splice(index, 1);
-            
-        }
-        
-    }
-        if(!deletar){
-            cordenadas.push({ ...Blocoselected! });
-            permitido = false;
-            console.log("Permitido agora é false")
-             
         }
 
-        render();
+        cordenadas.push({ ...Blocoselected! });
+        permitido = false;
+    }else{
+        // Se for deletar, remove o bloco na posição clicada
+        const index = cordenadas.findIndex(
+            (Bloco) =>
+                Bloco.dx === dx &&
+                Bloco.dy === dy
+        );
 
-        
+        if (index !== -1) {
+            cordenadas.splice(index, 1);
+        }
     }
+
+  
+
+    render();
 }
 function forno() {
     let coringa: Bloco | null = null;
