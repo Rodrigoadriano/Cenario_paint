@@ -33,6 +33,7 @@ class Bloco {
     sh: number;
     name: string;
     texture_name : string;
+    familia : string;
     selectable: boolean;
     dx?: number;
     dy?: number;
@@ -40,8 +41,9 @@ class Bloco {
     dh?: number;
     layer: number;
 
-    constructor(name: string, texture_name: string, sx: number, sy: number, sw: number, sh: number, selectable: boolean = false, layer:number = 0) {
+    constructor(name: string, texture_name: string,familia: string, sx: number, sy: number, sw: number, sh: number, selectable: boolean = false, layer:number = 0) {
         this.name = name;
+        this.familia = familia;
         this.selectable = selectable;
         this.texture_name = texture_name;
         this.layer = layer;
@@ -68,42 +70,42 @@ let blocosArray = [
     // new Bloco("xis",  17, 0, 16, 16),
     // new Bloco("xis",  34, 0, 16, 16),
     // new Bloco("brick",  0, 0, 16, 16),
-    new Bloco("brick_dark","brick_dark",  0, 0, 16, 16,true),
-    new Bloco("default","brick",  0, 0, 16, 16, true),
+    new Bloco("brick_dark","brick_dark","bloco",  0, 0, 16, 16,true),
+    new Bloco("default","brick", "bloco",  0, 0, 16, 16, true),
 
     // new Bloco("brick_sepia",  0, 0, 16, 16),
-    new Bloco("cima","gravel",  16, 0, 16, 16, true),
-    new Bloco("esquerda","gravel",  0, 16, 16, 16),
-    new Bloco("direita","gravel",  32, 16, 16, 16),
-    new Bloco("baixo","gravel",  16, 32, 16, 16),
-    new Bloco("default","gravel",  16, 16, 16, 16),
-    new Bloco("esquerda_cima","gravel",  0, 0, 16, 16),
-    new Bloco("direita_cima","gravel",  32, 0, 16, 16),
-    new Bloco("esquerda_baixo","gravel",  32, 32, 16, 16),
-    new Bloco("direita_baixo", "gravel", 0, 32, 16, 16),
+    new Bloco("cima","gravel", "gravel1", 16, 0, 16, 16, true),
+    new Bloco("esquerda","gravel", "gravel1" , 0, 16, 16, 16),
+    new Bloco("direita","gravel", "gravel1",  32, 16, 16, 16),
+    new Bloco("baixo","gravel", "gravel1",  16, 32, 16, 16),
+    new Bloco("default","gravel", "gravel1",  16, 16, 16, 16),
+    new Bloco("esquerda_cima","gravel", "gravel1",  0, 0, 16, 16),
+    new Bloco("direita_cima","gravel", "gravel1",  32, 0, 16, 16),
+    new Bloco("esquerda_baixo","gravel", "gravel1",  32, 32, 16, 16),
+    new Bloco("direita_baixo", "gravel", "gravel1", 0, 32, 16, 16),
 
-    new Bloco("cima","gravel2",  17, 0, 16, 16, true),
-    new Bloco("esquerda","gravel2",  0, 17, 16, 16),
-    new Bloco("direita","gravel2",  34, 17, 16, 16),
-    new Bloco("baixo","gravel2",  17, 34, 16, 16),
-    new Bloco("default","gravel2",  17, 17, 16, 16),
-    new Bloco("esquerda_cima","gravel2",  0, 0, 16, 16),
-    new Bloco("direita_cima","gravel2",  34, 0, 16, 16),
-    new Bloco("esquerda_baixo","gravel2",  34, 34, 16, 16),
-    new Bloco("direita_baixo", "gravel2", 0, 34, 16, 16),
+    new Bloco("cima","gravel2", "gravel2",  17, 0, 16, 16, true),
+    new Bloco("esquerda","gravel2", "gravel2",  0, 17, 16, 16),
+    new Bloco("direita","gravel2", "gravel2",  34, 17, 16, 16),
+    new Bloco("baixo","gravel2", "gravel2",  17, 34, 16, 16),
+    new Bloco("default","gravel2", "gravel2",  17, 17, 16, 16),
+    new Bloco("esquerda_cima","gravel2", "gravel2",  0, 0, 16, 16),
+    new Bloco("direita_cima","gravel2", "gravel2",  34, 0, 16, 16),
+    new Bloco("esquerda_baixo","gravel2", "gravel2",  34, 34, 16, 16),
+    new Bloco("direita_baixo", "gravel2", "gravel2", 0, 34, 16, 16),
 
-    new Bloco("mix","mix",  16, 0, 16, 16, true),
-    new Bloco("mix","mix",  0, 16, 16, 16),
-    new Bloco("mix","mix",  32, 16, 16, 16),
-    new Bloco("mix","mix",  16, 16, 16, 16),
-    new Bloco("mix","mix",  0, 0, 16, 16),
-    new Bloco("mix","mix",  32, 0, 16, 16),
-    new Bloco("mix","mix",  32, 0, 16, 16),
+    new Bloco("mix","mix", "mix",  16, 0, 16, 16, true),
+    new Bloco("mix","mix", "mix", 0, 16, 16, 16),
+    new Bloco("mix","mix", "mix", 32, 16, 16, 16),
+    new Bloco("mix","mix", "mix", 16, 16, 16, 16),
+    new Bloco("mix","mix", "mix", 0, 0, 16, 16),
+    new Bloco("mix","mix","mix",  32, 0, 16, 16),
+    new Bloco("mix","mix", "mix", 32, 0, 16, 16),
 
 
-    new Bloco("default","escada",  0, 0, 16, 16,true,1),
-    new Bloco("default","grass",  0, 0, 16, 16,true,2),
-    new Bloco("cima","grass",  16, 0, 16, 16,true,2)
+    new Bloco("default","escada","escada",  0, 0, 16, 16,true,1),
+    new Bloco("default","grass","verde",  0, 0, 16, 16,true,2),
+    new Bloco("cima","grass", "vermelha", 16, 0, 16, 16,true,2)
 
     
   
@@ -290,22 +292,22 @@ function forno() {
         const  direita = bloco.dx! + gridSize
         const  cima = bloco.dy! - gridSize
         const  baixo = bloco.dy! + gridSize
-        const  texture_name = bloco.texture_name;
+        const  familia = bloco.familia
 
        
-        const esquerdaVazia = esquerda > 0 && !cordenadas.some((b) => b.dx === esquerda && b.dy === bloco.dy && b.texture_name === texture_name);
+        const esquerdaVazia = esquerda > 0 && !cordenadas.some((b) => b.dx === esquerda && b.dy === bloco.dy && b.texture_name === familia);
 
-        const direitaVazia = direita < canvas.width && !cordenadas.some((b) => b.dx === direita && b.dy === bloco.dy && b.texture_name === texture_name);
+        const direitaVazia = direita < canvas.width && !cordenadas.some((b) => b.dx === direita && b.dy === bloco.dy && b.texture_name === familia);
 
-        const cimaVazia = cima > 0 && !cordenadas.some((b) => b.dy === cima && b.dx === bloco.dx && b.texture_name === texture_name);
-        const baixoVazia = baixo < canvas.height && !cordenadas.some((b) => b.dy === baixo && b.dx === bloco.dx && b.texture_name === texture_name);
+        const cimaVazia = cima > 0 && !cordenadas.some((b) => b.dy === cima && b.dx === bloco.dx && b.texture_name === familia);
+        const baixoVazia = baixo < canvas.height && !cordenadas.some((b) => b.dy === baixo && b.dx === bloco.dx && b.texture_name === familia);
 
         function getBloco(name: string) {
-            return blocosArray.find(item => item.texture_name === texture_name && item.name === name) || bloco;
+            return blocosArray.find(item => item.texture_name === familia && item.name === name) || bloco;
         }
 
         function getRandomBloco() {
-            const familyBlocos = blocosArray.filter(item => item.texture_name === texture_name);
+            const familyBlocos = blocosArray.filter(item => item.texture_name === familia);
             const random = Math.floor(Math.random() * familyBlocos.length);
             return familyBlocos[random] || bloco;
         }
