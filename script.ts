@@ -75,7 +75,7 @@ let blocosArray = [
 
     // new Bloco("brick_sepia",  0, 0, 16, 16),
     new Bloco("cima","gravel", "gravel1", 16, 0, 16, 16, true),
-    new Bloco("esquerda","gravel", "gravel1" , 0, 16, 16, 16),
+    new Bloco("esquerda","gravel", "gravel1" , 0, 16, 16, 16,true),
     new Bloco("direita","gravel", "gravel1",  32, 16, 16, 16),
     new Bloco("baixo","gravel", "gravel1",  16, 32, 16, 16),
     new Bloco("default","gravel", "gravel1",  16, 16, 16, 16),
@@ -295,19 +295,19 @@ function forno() {
         const  familia = bloco.familia
 
        
-        const esquerdaVazia = esquerda > 0 && !cordenadas.some((b) => b.dx === esquerda && b.dy === bloco.dy && b.texture_name === familia);
+        const esquerdaVazia = esquerda > 0 && !cordenadas.some((b) => b.dx === esquerda && b.dy === bloco.dy && b.familia === familia);
 
-        const direitaVazia = direita < canvas.width && !cordenadas.some((b) => b.dx === direita && b.dy === bloco.dy && b.texture_name === familia);
+        const direitaVazia = direita < canvas.width && !cordenadas.some((b) => b.dx === direita && b.dy === bloco.dy && b.familia === familia);
 
-        const cimaVazia = cima > 0 && !cordenadas.some((b) => b.dy === cima && b.dx === bloco.dx && b.texture_name === familia);
-        const baixoVazia = baixo < canvas.height && !cordenadas.some((b) => b.dy === baixo && b.dx === bloco.dx && b.texture_name === familia);
+        const cimaVazia = cima > 0 && !cordenadas.some((b) => b.dy === cima && b.dx === bloco.dx && b.familia === familia);
+        const baixoVazia = baixo < canvas.height && !cordenadas.some((b) => b.dy === baixo && b.dx === bloco.dx && b.familia === familia);
 
         function getBloco(name: string) {
-            return blocosArray.find(item => item.texture_name === familia && item.name === name) || bloco;
+            return blocosArray.find(item => item.familia === familia && item.name === name) || bloco;
         }
 
         function getRandomBloco() {
-            const familyBlocos = blocosArray.filter(item => item.texture_name === familia);
+            const familyBlocos = blocosArray.filter(item => item.familia === familia);
             const random = Math.floor(Math.random() * familyBlocos.length);
             return familyBlocos[random] || bloco;
         }
