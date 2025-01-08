@@ -85,7 +85,9 @@ let blocosArray = [
     new Bloco("mix", "mix", 0, 0, 16, 16),
     new Bloco("mix", "mix", 32, 0, 16, 16),
     new Bloco("mix", "mix", 32, 0, 16, 16),
-    new Bloco("default", "escada", 0, 0, 16, 16, true, 1)
+    new Bloco("default", "escada", 0, 0, 16, 16, true, 1),
+    new Bloco("default", "grass", 0, 0, 16, 16, true, 2),
+    new Bloco("cima", "grass", 16, 0, 16, 16, true, 2)
 ];
 let TexturasArray = [
     new textura("brick", "../assets/textures/16.png"),
@@ -96,6 +98,7 @@ let TexturasArray = [
     new textura("gravel2", "../assets/textures/gravel.png"),
     new textura("mix", "../assets/textures/bloco_pedra.png"),
     new textura("escada", "../assets/textures/escada.png"),
+    new textura("grass", "../assets/textures/grass.png"),
 ];
 function preloadTextures(texturas) {
     return __awaiter(this, void 0, void 0, function* () {
