@@ -32,7 +32,7 @@ class Bloco {
     sw: number;
     sh: number;
     name: string;
-    familia : string;
+    texture_name : string;
     selectable: boolean;
     dx?: number;
     dy?: number;
@@ -40,10 +40,10 @@ class Bloco {
     dh?: number;
     layer: number;
 
-    constructor(name: string, familia: string, sx: number, sy: number, sw: number, sh: number, selectable: boolean = false, layer:number = 0) {
+    constructor(name: string, texture_name: string, sx: number, sy: number, sw: number, sh: number, selectable: boolean = false, layer:number = 0) {
         this.name = name;
         this.selectable = selectable;
-        this.familia = familia;
+        this.texture_name = texture_name;
         this.layer = layer;
         this.sx = sx;
         this.sy = sy;
@@ -166,7 +166,7 @@ function seletorBlocos(bloco: Bloco[], texturas: textura[]) {
             div.id = (index + 1).toString(); // Define o ID como o índice + 1
 
             // Configura a textura se existir
-            const texture = loadedTextures[bloco.familia];
+            const texture = loadedTextures[bloco.texture_name];
             if (texture) {
             div.style.backgroundImage = `url(${texture.src})`;
             div.style.backgroundSize = `${texture.width * (64 / bloco.sw)}px ${texture.height * (64 / bloco.sh)}px`;
@@ -195,7 +195,7 @@ function seletorBlocos(bloco: Bloco[], texturas: textura[]) {
     }});
 }
 function DrawBloco(B1: Bloco, texturas: textura[]) {
-        const texture = loadedTextures[B1.familia];
+        const texture = loadedTextures[B1.texture_name];
         if (texture) {
             ctx.drawImage(
                 texture,
@@ -209,7 +209,7 @@ function DrawBloco(B1: Bloco, texturas: textura[]) {
                 B1.dh!
             );
         } else {
-            console.error(`Textura não encontrada para: ${B1.familia}`);
+            console.error(`Textura não encontrada para: ${B1.texture_name}`);
         }
 }
 function render() {
@@ -290,22 +290,22 @@ function forno() {
         const  direita = bloco.dx! + gridSize
         const  cima = bloco.dy! - gridSize
         const  baixo = bloco.dy! + gridSize
-        const  familia = bloco.familia;
+        const  texture_name = bloco.texture_name;
 
        
-        const esquerdaVazia = esquerda > 0 && !cordenadas.some((b) => b.dx === esquerda && b.dy === bloco.dy && b.familia === familia);
+        const esquerdaVazia = esquerda > 0 && !cordenadas.some((b) => b.dx === esquerda && b.dy === bloco.dy && b.texture_name === texture_name);
 
-        const direitaVazia = direita < canvas.width && !cordenadas.some((b) => b.dx === direita && b.dy === bloco.dy && b.familia === familia);
+        const direitaVazia = direita < canvas.width && !cordenadas.some((b) => b.dx === direita && b.dy === bloco.dy && b.texture_name === texture_name);
 
-        const cimaVazia = cima > 0 && !cordenadas.some((b) => b.dy === cima && b.dx === bloco.dx && b.familia === familia);
-        const baixoVazia = baixo < canvas.height && !cordenadas.some((b) => b.dy === baixo && b.dx === bloco.dx && b.familia === familia);
+        const cimaVazia = cima > 0 && !cordenadas.some((b) => b.dy === cima && b.dx === bloco.dx && b.texture_name === texture_name);
+        const baixoVazia = baixo < canvas.height && !cordenadas.some((b) => b.dy === baixo && b.dx === bloco.dx && b.texture_name === texture_name);
 
         function getBloco(name: string) {
-            return blocosArray.find(item => item.familia === familia && item.name === name) || bloco;
+            return blocosArray.find(item => item.texture_name === texture_name && item.name === name) || bloco;
         }
 
         function getRandomBloco() {
-            const familyBlocos = blocosArray.filter(item => item.familia === familia);
+            const familyBlocos = blocosArray.filter(item => item.texture_name === texture_name);
             const random = Math.floor(Math.random() * familyBlocos.length);
             return familyBlocos[random] || bloco;
         }
