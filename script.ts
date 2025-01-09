@@ -75,7 +75,7 @@ let blocosArray = [
 
     // new Bloco("brick_sepia",  0, 0, 16, 16),
     new Bloco("cima","gravel", "gravel1", 16, 0, 16, 16, true),
-    new Bloco("esquerda","gravel", "gravel1" , 0, 16, 16, 16,true),
+    new Bloco("esquerda","gravel", "gravel1" , 0, 16, 16, 16,),
     new Bloco("direita","gravel", "gravel1",  32, 16, 16, 16),
     new Bloco("baixo","gravel", "gravel1",  16, 32, 16, 16),
     new Bloco("default","gravel", "gravel1",  16, 16, 16, 16),
@@ -156,6 +156,17 @@ function drawGrid() {
         }
     }
 }
+function selectBloco(id: string) {
+    console.log('Selecionar o bloco id:',id);
+    document.querySelectorAll('.blocos').forEach(bloco => (bloco as HTMLDivElement).style.border = 'none');
+    let target = document.getElementById(String(id)) as HTMLDivElement;
+    // Adiciona uma borda ao bloco clicado
+    target.style.border = "4px solid #3b59c0";
+    
+    // Define o bloco selecionado
+    Blocoselected = blocosArray[Number(id)];
+};    
+
 function seletorBlocos(bloco: Bloco[], texturas: textura[]) {
     // Seleciona o elemento pai que conterá os blocos
     const blocoContainer = document.querySelector('.bloco') as HTMLDivElement;
@@ -165,7 +176,7 @@ function seletorBlocos(bloco: Bloco[], texturas: textura[]) {
         if (bloco.selectable) {
             const div = document.createElement('div'); // Cria uma nova div
             div.className = 'blocos'; // Adiciona a classe 'blocos'
-            div.id = (index + 1).toString(); // Define o ID como o índice + 1
+            div.id = (index).toString(); // Define o ID como o índice + 1
 
             // Configura a textura se existir
             const texture = loadedTextures[bloco.texture_name];
@@ -179,17 +190,17 @@ function seletorBlocos(bloco: Bloco[], texturas: textura[]) {
 
             // Adiciona o evento de clique ao criar o bloco
             div.addEventListener('click', (event: MouseEvent) => {
-            const target = event.currentTarget as HTMLDivElement; // Garante que o target é um HTMLDivElement
-            const clickedId: number = Number(target.id) - 1; // Obtém o ID do elemento clicado
-            permitido= true;
-            // Remove a borda de todos os blocos
-            document.querySelectorAll('.blocos').forEach(bloco => (bloco as HTMLDivElement).style.border = 'none');
+
+           
+                const target = event.currentTarget as HTMLDivElement; // Garante que o target é um HTMLDivElement
+                const clickedId: number = Number(target.id) ;
+                 // Obtém o ID do elemento clicado
+                permitido= true;
+                // Remove a borda de todos os blocos
+                
+
+            selectBloco(String( clickedId));
             
-            // Adiciona uma borda ao bloco clicado
-            target.style.border = "4px solid #3b59c0";
-            
-            // Define o bloco selecionado
-            Blocoselected = blocosArray[clickedId];
             });
 
             // Adiciona a div ao elemento pai
@@ -236,6 +247,7 @@ function CordinateManager(event: MouseEvent) {
     const dx = Math.floor(x / gridSize) * gridSize;
     const dy = Math.floor(y / gridSize) * gridSize;
 
+
     // Se não houve mudança nas coordenadas, retorna
     if (dx === lastDx && dy === lastDy && !permitido) {
         return;
@@ -268,13 +280,27 @@ function CordinateManager(event: MouseEvent) {
         
     }else{
         // Se for deletar, remove o bloco na posição clicada
+        if(cordenadas.length === 0){
+            return
+        }
+
         const index =  cordenadas.length - 1 - cordenadas.slice().reverse().findIndex(
             (Bloco) =>
                 Bloco.dx === dx &&
                 Bloco.dy === dy
         );
 
-        if (index !== -1) {
+        if (index !== -1 ) {
+            console.log('Deletar bloco:',index);
+            let index_ = blocosArray.findIndex((x)=>
+                x.name === cordenadas[index].name &&
+                x.familia === cordenadas[index].familia &&
+                x.texture_name === cordenadas[index].texture_name
+            );
+            if(index_ !== -1){
+                selectBloco(String(index_));
+            }
+           
             cordenadas.splice(index, 1);
         }
       
@@ -343,9 +369,9 @@ function forno() {
             case cimaVazia:
                 coringa = getBloco("cima") 
             break;
-            // case baixoVazia:
-            //     coringa = getBloco("baixo") 
-            // break;
+            case baixoVazia:
+                coringa = getBloco("baixo") 
+            break;
             default:
             coringa = getBloco("default") ;
             break;
@@ -411,6 +437,8 @@ canvas.addEventListener('mousedown', (event) => {
         deletar = true;       
         permitido = true;
         clicked = true; 
+
+   
         CordinateManager(event);
     }
 
