@@ -247,6 +247,7 @@ function forno() {
         const cima = bloco.dy - gridSize;
         const baixo = bloco.dy + gridSize;
         const familia = bloco.familia;
+        const mix = bloco.mix;
         const esquerdaVazia = esquerda > 0 && !cordenadas.some((b) => b.dx === esquerda && b.dy === bloco.dy && b.familia === familia);
         const direitaVazia = direita < canvas.width && !cordenadas.some((b) => b.dx === direita && b.dy === bloco.dy && b.familia === familia);
         const cimaVazia = cima > 0 && !cordenadas.some((b) => b.dy === cima && b.dx === bloco.dx && b.familia === familia);
@@ -254,15 +255,27 @@ function forno() {
         function getBloco(name) {
             return blocosArray.find(item => item.familia === familia && item.name === name) || bloco;
         }
-        function getRandomBloco() {
+        function getRandomBloco(id) {
+            if (id) {
+                return blocosArray.find(item => item.familia === familia && item.mix_id === id) || bloco;
+            }
             const familyBlocos = blocosArray.filter(item => item.familia === familia);
             const random = Math.floor(Math.random() * familyBlocos.length);
-            return familyBlocos[random] || bloco;
+            const sorteado = familyBlocos[random];
+            sorteado.mix_id = String(random);
+            return sorteado || bloco;
         }
         switch (true) {
             case bloco.name === "mix":
                 //get random block 
-                coringa = getRandomBloco();
+                if (!mix) {
+                    coringa = getRandomBloco();
+                    bloco.mix = true;
+                    bloco.mix_id = coringa.mix_id;
+                }
+                else {
+                    coringa = getRandomBloco(bloco.mix_id);
+                }
                 break;
             case esquerdaVazia && direitaVazia && cimaVazia && baixoVazia:
                 coringa = getBloco("default");

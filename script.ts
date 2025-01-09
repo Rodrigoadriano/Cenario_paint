@@ -39,6 +39,8 @@ class Bloco {
     dy?: number;
     dw?: number;
     dh?: number;
+    mix?: boolean;
+    mix_id?: string;
     layer: number;
 
     constructor(name: string, texture_name: string,familia: string, sx: number, sy: number, sw: number, sh: number, selectable: boolean = false, layer:number = 0) {
@@ -319,7 +321,7 @@ function forno() {
         const  cima = bloco.dy! - gridSize
         const  baixo = bloco.dy! + gridSize
         const  familia = bloco.familia
-
+        const  mix = bloco.mix
        
         const esquerdaVazia = esquerda > 0 && !cordenadas.some((b) => b.dx === esquerda && b.dy === bloco.dy && b.familia === familia);
 
@@ -332,16 +334,28 @@ function forno() {
             return blocosArray.find(item => item.familia === familia && item.name === name) || bloco;
         }
 
-        function getRandomBloco() {
+        function getRandomBloco(id?: string) {
+            if(id){
+                return blocosArray.find(item => item.familia === familia && item.mix_id === id) || bloco;
+            }
             const familyBlocos = blocosArray.filter(item => item.familia === familia);
             const random = Math.floor(Math.random() * familyBlocos.length);
-            return familyBlocos[random] || bloco;
+            const sorteado = familyBlocos[random]
+            sorteado.mix_id = String(random);
+            return sorteado || bloco;
         }
 
         switch (true) {
             case bloco.name === "mix":
             //get random block 
-            coringa = getRandomBloco();
+            if(!mix){
+                coringa = getRandomBloco();
+                bloco.mix = true;
+                bloco.mix_id = coringa.mix_id;
+            }else{
+                coringa = getRandomBloco(bloco.mix_id);
+            }
+            
             break
 
             case esquerdaVazia && direitaVazia && cimaVazia && baixoVazia:
