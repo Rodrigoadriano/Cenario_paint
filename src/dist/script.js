@@ -225,7 +225,7 @@ function CordinateManager(event) {
         }
         const index = cordenadas.length - 1 - cordenadas.slice().reverse().findIndex((Bloco) => Bloco.dx === dx &&
             Bloco.dy === dy);
-        if (index !== -1) {
+        if (index !== -1 && index < cordenadas.length) {
             console.log('Deletar bloco:', index);
             let index_ = blocosArray.findIndex((x) => x.name === cordenadas[index].name &&
                 x.familia === cordenadas[index].familia &&

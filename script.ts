@@ -290,7 +290,7 @@ function CordinateManager(event: MouseEvent) {
                 Bloco.dy === dy
         );
 
-        if (index !== -1 ) {
+        if (index !== -1  && index < cordenadas.length) {
             console.log('Deletar bloco:',index);
             let index_ = blocosArray.findIndex((x)=>
                 x.name === cordenadas[index].name &&
