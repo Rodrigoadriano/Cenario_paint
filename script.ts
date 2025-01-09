@@ -96,6 +96,16 @@ let blocosArray = [
     new Bloco("esquerda_baixo","gravel2", "gravel2",  34, 34, 16, 16),
     new Bloco("direita_baixo", "gravel2", "gravel2", 0, 34, 16, 16),
 
+    new Bloco("cima","grass3", "grass3",  17, 0, 16, 16, true),
+    new Bloco("esquerda","grass3", "grass3",  0, 17, 16, 16),
+    new Bloco("direita","grass3", "grass3",  34, 17, 16, 16),
+    new Bloco("baixo","grass3", "grass3",  17, 34, 16, 16),
+    new Bloco("default","grass3", "grass3",  17, 17, 16, 16),
+    new Bloco("esquerda_cima","grass3", "grass3",  0, 0, 16, 16),
+    new Bloco("direita_cima","grass3", "grass3",  34, 0, 16, 16),
+    new Bloco("esquerda_baixo","grass3", "grass3",  34, 34, 16, 16),
+    new Bloco("direita_baixo", "grass3", "grass3", 0, 34, 16, 16),
+
     new Bloco("mix","mix", "mix",  16, 0, 16, 16, true),
     new Bloco("mix","mix", "mix", 0, 16, 16, 16),
     new Bloco("mix","mix", "mix", 32, 16, 16, 16),
@@ -123,6 +133,7 @@ let TexturasArray = [
     new textura("mix", "../assets/textures/bloco_pedra.png"),
     new textura("escada", "../assets/textures/escada.png"),
     new textura("grass", "../assets/textures/grass.png"),
+    new textura("grass3", "../assets/textures/grass3.png"),
 
 
 ];
