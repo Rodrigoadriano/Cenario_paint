@@ -72,7 +72,7 @@ let blocosArray = [
     // new Bloco("xis",  17, 0, 16, 16),
     // new Bloco("xis",  34, 0, 16, 16),
     // new Bloco("brick",  0, 0, 16, 16),
-    new Bloco("brick_dark","brick_dark","bloco_dark",  0, 0, 16, 16,true),
+    new Bloco("default","brick_dark","bloco_dark",  0, 0, 16, 16,true),
     new Bloco("default","brick", "bloco",  0, 0, 16, 16, true),
 
     // new Bloco("brick_sepia",  0, 0, 16, 16),
@@ -105,6 +105,22 @@ let blocosArray = [
     new Bloco("direita_cima","grass3", "grass3",  34, 0, 16, 16),
     new Bloco("esquerda_baixo","grass3", "grass3",  34, 34, 16, 16),
     new Bloco("direita_baixo", "grass3", "grass3", 0, 34, 16, 16),
+    
+    new Bloco("coluna_topo", "grass3", "grass3", 48, 0, 16, 16 ),
+    new Bloco("coluna_meio", "grass3", "grass3", 48, 16, 16, 16 ),
+    new Bloco("coluna_baixo", "grass3", "grass3", 48, 32, 16, 16 ),
+
+    new Bloco("plataforma_1", "grass3", "grass3", 0, 48, 16, 16 ),
+    new Bloco("plataforma_2", "grass3", "grass3", 16, 48, 16, 16 ),
+    new Bloco("plataforma_3", "grass3", "grass3", 32, 48, 16, 16 ),
+    new Bloco("full", "grass3", "grass3", 48, 48, 16, 16 ),
+
+
+
+
+
+
+
 
     new Bloco("mix","mix", "mix",  16, 0, 16, 16, true),
     new Bloco("mix","mix", "mix", 0, 16, 16, 16),
@@ -116,7 +132,7 @@ let blocosArray = [
 
 
     new Bloco("default","escada","escada",  0, 0, 16, 16,true,1),
-    new Bloco("default","grass","verde",  0, 0, 16, 16,true,2),
+    new Bloco("default","grass","verde",  0, 0, 16, 15,true,2),
     new Bloco("cima","grass", "vermelha", 16, 0, 16, 16,true,2)
 
     
@@ -342,7 +358,7 @@ function forno() {
         const baixoVazia = baixo < canvas.height && !cordenadas.some((b) => b.dy === baixo && b.dx === bloco.dx && b.familia === familia);
 
         function getBloco(name: string) {
-            return blocosArray.find(item => item.familia === familia && item.name === name) || bloco;
+            return blocosArray.find(item => item.familia === familia && item.name === name);
         }
 
         function getRandomBloco(id?: string) {
@@ -363,42 +379,73 @@ function forno() {
                 coringa = getRandomBloco();
                 bloco.mix = true;
                 bloco.mix_id = coringa.mix_id;
-            }else{
+            } else {
                 coringa = getRandomBloco(bloco.mix_id);
             }
-            
-            break
+            break;
+
+            case esquerdaVazia && direitaVazia && cimaVazia && !baixoVazia:
+            coringa = getBloco("coluna_topo")!;
+    
+            if (coringa) break;
+
+            case esquerdaVazia && direitaVazia && !cimaVazia && baixoVazia:
+            coringa = getBloco("coluna_baixo")!;
+            if (coringa) break;
+
+            case esquerdaVazia && direitaVazia && !cimaVazia && !baixoVazia:
+            coringa = getBloco("coluna_meio")!;
+            if (coringa) break;
+
+
+            case esquerdaVazia && !direitaVazia && cimaVazia && baixoVazia:
+            coringa = getBloco("plataforma_1")!;
+            if (coringa) break;
+            case !esquerdaVazia && !direitaVazia && cimaVazia && baixoVazia:
+            coringa = getBloco("plataforma_2")!;
+            if (coringa) break;
+            case !esquerdaVazia && direitaVazia && cimaVazia && baixoVazia:
+            coringa = getBloco("plataforma_3")!;
+            if (coringa) break;
 
             case esquerdaVazia && direitaVazia && cimaVazia && baixoVazia:
-            coringa = getBloco("default") ;
-            break;
+            coringa = getBloco("full")!
+            if (coringa) break;
+
             case esquerdaVazia && cimaVazia:
-            coringa = getBloco("esquerda_cima") 
-            break;
+            coringa = getBloco("esquerda_cima")!;
+            if (coringa) break;
+
             case direitaVazia && cimaVazia:
-                coringa = getBloco("direita_cima") 
-            break;
+            coringa = getBloco("direita_cima")!;
+            if (coringa) break;
+
             case baixoVazia && !direitaVazia && !cimaVazia && esquerdaVazia:
-                coringa = getBloco("direita_baixo") 
-                break;
-            case baixoVazia && !esquerdaVazia && !cimaVazia && direitaVazia:	
-            coringa = getBloco("esquerda_baixo") 
-                break;
+            coringa = getBloco("direita_baixo")!;
+            if (coringa) break;
+
+            case baixoVazia && !esquerdaVazia && !cimaVazia && direitaVazia:
+            coringa = getBloco("esquerda_baixo")!;
+            if (coringa) break;
 
             case esquerdaVazia:
-                coringa = getBloco("esquerda") 
-            break;
+            coringa = getBloco("esquerda")!;
+            if (coringa) break;
+
             case direitaVazia:
-                coringa = getBloco("direita") 
-            break;
+            coringa = getBloco("direita")!;
+            if (coringa) break;
+
             case cimaVazia:
-                coringa = getBloco("cima") 
-            break;
+            coringa = getBloco("cima")!;
+            if (coringa) break;
+
             case baixoVazia:
-                coringa = getBloco("baixo") 
-            break;
+            coringa = getBloco("baixo")!;
+            if (coringa) break;
+
             default:
-            coringa = getBloco("default") ;
+            coringa = getBloco("default")!;
             break;
         }
   
