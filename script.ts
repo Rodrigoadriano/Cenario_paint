@@ -115,6 +115,31 @@ let blocosArray = [
     new Bloco("plataforma_3", "grass3", "grass3", 32, 48, 16, 16 ),
     new Bloco("full", "grass3", "grass3", 48, 48, 16, 16 ),
 
+    new Bloco("cima","guia", "guia",  16, 0, 16, 16, true),
+    new Bloco("esquerda","guia", "guia",  0, 16, 16, 16),
+    new Bloco("direita","guia", "guia",  32, 16, 16, 16),
+    new Bloco("baixo","guia", "guia",  16, 32, 16, 16),
+    new Bloco("default","guia", "guia",  16, 16, 16, 16),
+    new Bloco("esquerda_cima","guia", "guia",  0, 0, 16, 16),
+    new Bloco("direita_cima","guia", "guia",  32, 0, 16, 16),
+    new Bloco("esquerda_baixo","guia", "guia",  32, 32, 16, 16),
+    new Bloco("direita_baixo", "guia", "guia", 0, 32, 16, 16),
+    
+    new Bloco("coluna_topo", "guia", "guia", 48, 0, 16, 16 ),
+    new Bloco("coluna_meio", "guia", "guia", 48, 16, 16, 16 ),
+    new Bloco("coluna_baixo", "guia", "guia", 48, 32, 16, 16 ),
+
+    new Bloco("plataforma_1", "guia", "guia", 0, 48, 16, 16 ),
+    new Bloco("plataforma_2", "guia", "guia", 16, 48, 16, 16 ),
+    new Bloco("plataforma_3", "guia", "guia", 32, 48, 16, 16 ),
+    
+    new Bloco("inter_1", "guia", "guia", 80, 16, 16, 16, true),
+    new Bloco("inter_2", "guia", "guia", 80, 0, 16, 16 ,true),
+    new Bloco("inter_3", "guia", "guia", 64, 16, 16, 16 ,true),
+    new Bloco("inter_4", "guia", "guia", 64, 0, 16, 16 ,true),
+
+    new Bloco("full", "guia", "guia", 48, 48, 16, 16 ),
+
 
 
 
@@ -150,6 +175,7 @@ let TexturasArray = [
     new textura("escada", "../assets/textures/escada.png"),
     new textura("grass", "../assets/textures/grass.png"),
     new textura("grass3", "../assets/textures/grass3.png"),
+    new textura("guia", "../assets/textures/guia.png"),
 
 
 ];
@@ -348,14 +374,24 @@ function forno() {
         const  cima = bloco.dy! - gridSize
         const  baixo = bloco.dy! + gridSize
         const  familia = bloco.familia
+
+    
+
         const  mix = bloco.mix
        
         const esquerdaVazia = esquerda > 0 && !cordenadas.some((b) => b.dx === esquerda && b.dy === bloco.dy && b.familia === familia);
+        const ponta_1_vazia = esquerda > 0 && cima > 0 && !cordenadas.some((b) => b.dx === esquerda && b.dy === (bloco.dy! - gridSize) && b.familia === familia);
+        const ponta_2_vazia = esquerda > 0  && baixo < canvas.height && !cordenadas.some((b) => b.dx === esquerda && b.dy === (bloco.dy! + gridSize) && b.familia === familia);
 
         const direitaVazia = direita < canvas.width && !cordenadas.some((b) => b.dx === direita && b.dy === bloco.dy && b.familia === familia);
+        const ponta_3_vazia =  direita < canvas.width && cima > 0 && !cordenadas.some((b) => b.dx === direita && b.dy === (bloco.dy! - gridSize) && b.familia === familia);
+        const ponta_4_vazia =  direita < canvas.width && baixo < canvas.height && !cordenadas.some((b) => b.dx === direita && b.dy === (bloco.dy! + gridSize) && b.familia === familia);
 
         const cimaVazia = cima > 0 && !cordenadas.some((b) => b.dy === cima && b.dx === bloco.dx && b.familia === familia);
         const baixoVazia = baixo < canvas.height && !cordenadas.some((b) => b.dy === baixo && b.dx === bloco.dx && b.familia === familia);
+
+
+     
 
         function getBloco(name: string) {
             return blocosArray.find(item => item.familia === familia && item.name === name);
@@ -410,6 +446,22 @@ function forno() {
 
             case esquerdaVazia && direitaVazia && cimaVazia && baixoVazia:
             coringa = getBloco("full")!
+            if (coringa) break;
+
+            case !esquerdaVazia && !direitaVazia && !cimaVazia && !baixoVazia:
+                if(ponta_1_vazia){
+                    coringa = getBloco("inter_1")!;
+                }else if(ponta_2_vazia){
+                    coringa = getBloco("inter_2")!;}
+                else if(ponta_3_vazia){
+                    coringa = getBloco("inter_3")!;}
+                else if(ponta_4_vazia){ 
+                    coringa = getBloco("inter_4")!;}
+                               
+                
+                else
+                {coringa = getBloco("default")!}
+            
             if (coringa) break;
 
             case esquerdaVazia && cimaVazia:
