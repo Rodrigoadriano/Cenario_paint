@@ -133,10 +133,10 @@ let blocosArray = [
     new Bloco("plataforma_2", "guia", "guia", 16, 48, 16, 16 ),
     new Bloco("plataforma_3", "guia", "guia", 32, 48, 16, 16 ),
     
-    new Bloco("inter_1", "guia", "guia", 80, 16, 16, 16, true),
-    new Bloco("inter_2", "guia", "guia", 80, 0, 16, 16 ,true),
-    new Bloco("inter_3", "guia", "guia", 64, 16, 16, 16 ,true),
-    new Bloco("inter_4", "guia", "guia", 64, 0, 16, 16 ,true),
+    new Bloco("inter_1", "guia", "guia", 80, 16, 16, 16),
+    new Bloco("inter_2", "guia", "guia", 80, 0, 16, 16 ),
+    new Bloco("inter_3", "guia", "guia", 64, 16, 16, 16 ),
+    new Bloco("inter_4", "guia", "guia", 64, 0, 16, 16 ),
 
     new Bloco("full", "guia", "guia", 48, 48, 16, 16 ),
 
@@ -394,8 +394,16 @@ function forno() {
      
 
         function getBloco(name: string) {
-            return blocosArray.find(item => item.familia === familia && item.name === name);
+
+            const bloco = blocosArray.find(item => item.familia === familia && item.name === name);
+
+            const bloco2 = bloco ? bloco : blocosArray.find(item => item.familia === familia && item.name === "default")!;
+
+
+            return bloco2
         }
+
+
 
         function getRandomBloco(id?: string) {
             if(id){
@@ -447,25 +455,31 @@ function forno() {
             case esquerdaVazia && direitaVazia && cimaVazia && baixoVazia:
             coringa = getBloco("full")!
             if (coringa) break;
-
-            case !esquerdaVazia && !direitaVazia && !cimaVazia && !baixoVazia:
-                if(ponta_1_vazia){
-                    coringa = getBloco("inter_1")!;
-                }else if(ponta_2_vazia){
-                    coringa = getBloco("inter_2")!;}
-                else if(ponta_3_vazia){
-                    coringa = getBloco("inter_3")!;}
-                else if(ponta_4_vazia){ 
-                    coringa = getBloco("inter_4")!;}
-                               
-                
-                else
-                {coringa = getBloco("default")!}
             
+
+            case !esquerdaVazia && !direitaVazia && !cimaVazia && !baixoVazia &&ponta_1_vazia:
+            coringa = getBloco("inter_1")!;
             if (coringa) break;
+                      
+            case !esquerdaVazia && !direitaVazia && !cimaVazia && !baixoVazia &&ponta_2_vazia:
+            coringa = getBloco("inter_2")!;
+            if (coringa) break;
+                      
+            case !esquerdaVazia && !direitaVazia && !cimaVazia && !baixoVazia &&ponta_3_vazia:
+            coringa = getBloco("inter_3")!;
+            if (coringa) break;
+                      
+            case !esquerdaVazia && !direitaVazia && !cimaVazia && !baixoVazia &&ponta_4_vazia:
+            coringa = getBloco("inter_4")!;
+            if (coringa) break;
+                      
+ 
+
+
 
             case esquerdaVazia && cimaVazia:
             coringa = getBloco("esquerda_cima")!;
+    
             if (coringa) break;
 
             case direitaVazia && cimaVazia:
