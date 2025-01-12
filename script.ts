@@ -165,17 +165,15 @@ let blocosArray = [
 
 ]
 let TexturasArray = [
-    new textura("brick", "../assets/textures/16.png"),
-    // new textura("xis", "00.png"),
-    new textura("brick_dark", "../assets/textures/17.png"),
-    // new textura("brick_sepia", "18.png"),
-    new textura("gravel", "../assets/textures/Sprite-0002.png"),
-    new textura("gravel2", "../assets/textures/gravel.png"),
-    new textura("mix", "../assets/textures/bloco_pedra.png"),
-    new textura("escada", "../assets/textures/escada.png"),
-    new textura("grass", "../assets/textures/grass.png"),
-    new textura("grass3", "../assets/textures/grass3.png"),
-    new textura("guia", "../assets/textures/guia.png"),
+    new textura("brick", "src/assets/textures/16.png"),
+    new textura("brick_dark", "src/assets/textures/17.png"),
+    new textura("gravel", "src/assets/textures/Sprite-0002.png"),
+    new textura("gravel2", "src/assets/textures/gravel.png"),
+    new textura("mix", "src/assets/textures/bloco_pedra.png"),
+    new textura("escada", "src/assets/textures/escada.png"),
+    new textura("grass", "src/assets/textures/grass.png"),
+    new textura("grass3", "src/assets/textures/grass3.png"),
+    new textura("guia", "src/assets/textures/guia.png"),
 
 
 ];
