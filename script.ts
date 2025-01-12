@@ -67,15 +67,17 @@ class textura {
         this.texturaURL = texturaURL; // Apenas armazenamos o URL
     }
 }
+
+
+
+
+
 let blocosArray = [
-    // new Bloco("xis",  0, 0, 16, 16),
-    // new Bloco("xis",  17, 0, 16, 16),
-    // new Bloco("xis",  34, 0, 16, 16),
-    // new Bloco("brick",  0, 0, 16, 16),
+
     new Bloco("default","brick_dark","bloco_dark",  0, 0, 16, 16,true),
     new Bloco("default","brick", "bloco",  0, 0, 16, 16, true),
 
-    // new Bloco("brick_sepia",  0, 0, 16, 16),
+
     new Bloco("cima","gravel", "gravel1", 16, 0, 16, 16, true),
     new Bloco("esquerda","gravel", "gravel1" , 0, 16, 16, 16,),
     new Bloco("direita","gravel", "gravel1",  32, 16, 16, 16),
