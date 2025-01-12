@@ -59,12 +59,11 @@ class Bloco {
 }
 class textura {
     name: string;
-   
-    texturaURL: string;
+    path: string;
 
-    constructor(name: string, texturaURL: string) {
+    constructor({name, path}: {name: string; path: string}) {
         this.name = name;
-        this.texturaURL = texturaURL; // Apenas armazenamos o URL
+        this.path = path; // Apenas armazenamos o URL
     }
 }
 
@@ -166,25 +165,49 @@ let blocosArray = [
   
 
 ]
-let TexturasArray = [
-    new textura("brick", "src/assets/textures/16.png"),
-    new textura("brick_dark", "src/assets/textures/17.png"),
-    new textura("gravel", "src/assets/textures/Sprite-0002.png"),
-    new textura("gravel2", "src/assets/textures/gravel.png"),
-    new textura("mix", "src/assets/textures/bloco_pedra.png"),
-    new textura("escada", "src/assets/textures/escada.png"),
-    new textura("grass", "src/assets/textures/grass.png"),
-    new textura("grass3", "src/assets/textures/grass3.png"),
-    new textura("guia", "src/assets/textures/guia.png"),
+
+const texturePath = "src/assets/textures/";
+let TexturePool: textura[] = [
+    {name: 'brick', path: texturePath + "16.png"},
+    {name: 'brick_dark', path: texturePath + "17.png"},
+    {name: 'gravel', path: texturePath + "Sprite-0002.png"},
+    {name: 'gravel2', path: texturePath + "gravel.png"},
+    {name: 'mix', path: texturePath + "bloco_pedra.png"},
+    {name: 'escada', path: texturePath + "escada.png"},
+    {name: 'grass', path: texturePath + "grass.png"},
+    {name: 'grass3', path: texturePath + "grass3.png"},
+    {name: 'guia', path: texturePath + "guia.png"}
+];
+
+let TexturasArray: textura[] = [
+    // new textura("brick", "src/assets/textures/16.png"),
+    // new textura("brick_dark", "src/assets/textures/17.png"),
+    // new textura("gravel", "src/assets/textures/Sprite-0002.png"),
+    // new textura("gravel2", "src/assets/textures/gravel.png"),
+    // new textura("mix", "src/assets/textures/bloco_pedra.png"),
+    // new textura("escada", "src/assets/textures/escada.png"),
+    // new textura("grass", "src/assets/textures/grass.png"),
+    // new textura("grass3", "src/assets/textures/grass3.png"),
+    // new textura("guia", "src/assets/textures/guia.png"),
 
 
 ];
-async function preloadTextures(texturas: textura[]): Promise<void> {
-    const promises = texturas.map((t) => {
+async function preloadTextures(): Promise<void> {
+    
+    TexturePool.forEach( (text)=> {
+        TexturasArray.push(new textura(text))
+    })
+
+
+
+
+
+
+    const promises = TexturasArray.map((t) => {
         if (!loadedTextures[t.name]) {
             return new Promise<void>((resolve, reject) => {
                 const img = new Image();
-                img.src = t.texturaURL; // Define o URL da imagem
+                img.src = t.path; // Define o URL da imagem
                 img.onload = () => {
                     loadedTextures[t.name] = img; // Armazena a imagem carregada
                     resolve();
@@ -616,7 +639,7 @@ canvasContainer.addEventListener('mouseleave', () => {
 
 async function init() {
     try {
-        await preloadTextures(TexturasArray); // Aguarda o carregamento das texturas
+        await preloadTextures(); // Aguarda o carregamento das texturas
         seletorBlocos(blocosArray, TexturasArray); // Usa as texturas carregadas
         render(); // Renderiza a aplicação
     } catch (error) {
