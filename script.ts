@@ -1,3 +1,5 @@
+
+
 const canvas = document.getElementById('canvas') as HTMLCanvasElement ;
 const canvasContainer = document.getElementsByClassName('canvas_container')[0] as HTMLElement;
 const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
@@ -24,35 +26,102 @@ if (canvas) {
 canvas.addEventListener('contextmenu', (event) => {
     event.preventDefault();
   });
-class Bloco {
 
-    // image: HTMLImageElement;
-    sx: number;
-    sy: number;
-    sw: number;
-    sh: number;
+
+  interface BlocoOptions {
     name: string;
-    texture_name : string;
-    familia : string;
-    selectable: boolean;
+    texture_name: string;
+    familia: string;
+    linha:number;
+    coluna:number;
+    altura?:number;
+    largura: number;
+    gap?: number;
+    sx?: number;
+    sy?: number;
+    sw?: number;
+    sh?: number;
+    selectable?: boolean;
+    layer?: number;
     dx?: number;
     dy?: number;
     dw?: number;
     dh?: number;
     mix?: boolean;
     mix_id?: string;
-    layer: number;
+}
 
-    constructor(name: string, texture_name: string,familia: string, sx: number, sy: number, sw: number, sh: number, selectable: boolean = false, layer:number = 0) {
+  class Bloco {
+
+    // image: HTMLImageElement;
+    sx?: number;
+    sy?: number;
+    sw?: number;
+    sh?: number;
+
+    name: string;
+    texture_name : string;
+    familia : string;
+
+    linha:number;
+    coluna:number;
+
+    altura?:number;
+    largura: number;
+
+    gap?: number;
+
+    selectable?: boolean;
+    dx?: number;
+    dy?: number;
+    dw?: number;
+    dh?: number;
+    mix?: boolean;
+    mix_id?: string;
+    layer?: number;
+
+    constructor(options: BlocoOptions) {
+        const {
+            name,
+            texture_name,
+            familia,
+            linha,
+            coluna,
+            altura,
+            largura,
+            gap =0,
+            sw,
+            sh,
+            selectable = false,
+            layer = 0,
+            dx,
+            dy,
+            dw,
+            dh,
+            mix,
+            mix_id
+        } = options;
+
         this.name = name;
-        this.familia = familia;
-        this.selectable = selectable;
         this.texture_name = texture_name;
+        this.familia = familia;
+        this.linha = linha;
+        this.coluna= coluna;
+        this.altura = altura! > 0 ? altura:largura;
+        this.largura= largura;
+        this.gap = gap
+        this.selectable = selectable;
         this.layer = layer;
-        this.sx = sx;
-        this.sy = sy;
-        this.sw = sw;
-        this.sh = sh;
+        this.sx = (this.largura * this.coluna) - this.largura + this.gap;
+        this.sy = (this.altura! * this.linha) - this.altura! + this.gap;
+        this.sw = this.largura;
+        this.sh = this.altura;
+        this.dx = dx;
+        this.dy = dy;
+        this.dw = dw;
+        this.dh = dh;
+        this.mix = mix;
+        this.mix_id = mix_id;
     }
 
 
@@ -60,6 +129,7 @@ class Bloco {
 class textura {
     name: string;
     path: string;
+    width?: Number;
 
     constructor({name, path}: {name: string; path: string}) {
         this.name = name;
@@ -67,104 +137,88 @@ class textura {
     }
 }
 
-
-
-
-
-let blocosArray = [
-
-    new Bloco("default","brick_dark","bloco_dark",  0, 0, 16, 16,true),
-    new Bloco("default","brick", "bloco",  0, 0, 16, 16, true),
-
-
-    new Bloco("cima","gravel", "gravel1", 16, 0, 16, 16, true),
-    new Bloco("esquerda","gravel", "gravel1" , 0, 16, 16, 16,),
-    new Bloco("direita","gravel", "gravel1",  32, 16, 16, 16),
-    new Bloco("baixo","gravel", "gravel1",  16, 32, 16, 16),
-    new Bloco("default","gravel", "gravel1",  16, 16, 16, 16),
-    new Bloco("esquerda_cima","gravel", "gravel1",  0, 0, 16, 16),
-    new Bloco("direita_cima","gravel", "gravel1",  32, 0, 16, 16),
-    new Bloco("esquerda_baixo","gravel", "gravel1",  32, 32, 16, 16),
-    new Bloco("direita_baixo", "gravel", "gravel1", 0, 32, 16, 16),
-
-    new Bloco("cima","gravel2", "gravel2",  17, 0, 16, 16, true),
-    new Bloco("esquerda","gravel2", "gravel2",  0, 17, 16, 16),
-    new Bloco("direita","gravel2", "gravel2",  34, 17, 16, 16),
-    new Bloco("baixo","gravel2", "gravel2",  17, 34, 16, 16),
-    new Bloco("default","gravel2", "gravel2",  17, 17, 16, 16),
-    new Bloco("esquerda_cima","gravel2", "gravel2",  0, 0, 16, 16),
-    new Bloco("direita_cima","gravel2", "gravel2",  34, 0, 16, 16),
-    new Bloco("esquerda_baixo","gravel2", "gravel2",  34, 34, 16, 16),
-    new Bloco("direita_baixo", "gravel2", "gravel2", 0, 34, 16, 16),
-
-    new Bloco("cima","grass3", "grass3",  17, 0, 16, 16, true),
-    new Bloco("esquerda","grass3", "grass3",  0, 17, 16, 16),
-    new Bloco("direita","grass3", "grass3",  34, 17, 16, 16),
-    new Bloco("baixo","grass3", "grass3",  17, 34, 16, 16),
-    new Bloco("default","grass3", "grass3",  17, 17, 16, 16),
-    new Bloco("esquerda_cima","grass3", "grass3",  0, 0, 16, 16),
-    new Bloco("direita_cima","grass3", "grass3",  34, 0, 16, 16),
-    new Bloco("esquerda_baixo","grass3", "grass3",  34, 34, 16, 16),
-    new Bloco("direita_baixo", "grass3", "grass3", 0, 34, 16, 16),
-    
-    new Bloco("coluna_topo", "grass3", "grass3", 48, 0, 16, 16 ),
-    new Bloco("coluna_meio", "grass3", "grass3", 48, 16, 16, 16 ),
-    new Bloco("coluna_baixo", "grass3", "grass3", 48, 32, 16, 16 ),
-
-    new Bloco("plataforma_1", "grass3", "grass3", 0, 48, 16, 16 ),
-    new Bloco("plataforma_2", "grass3", "grass3", 16, 48, 16, 16 ),
-    new Bloco("plataforma_3", "grass3", "grass3", 32, 48, 16, 16 ),
-    new Bloco("full", "grass3", "grass3", 48, 48, 16, 16 ),
-
-    new Bloco("cima","guia", "guia",  16, 0, 16, 16, true),
-    new Bloco("esquerda","guia", "guia",  0, 16, 16, 16),
-    new Bloco("direita","guia", "guia",  32, 16, 16, 16),
-    new Bloco("baixo","guia", "guia",  16, 32, 16, 16),
-    new Bloco("default","guia", "guia",  16, 16, 16, 16),
-    new Bloco("esquerda_cima","guia", "guia",  0, 0, 16, 16),
-    new Bloco("direita_cima","guia", "guia",  32, 0, 16, 16),
-    new Bloco("esquerda_baixo","guia", "guia",  32, 32, 16, 16),
-    new Bloco("direita_baixo", "guia", "guia", 0, 32, 16, 16),
-    
-    new Bloco("coluna_topo", "guia", "guia", 48, 0, 16, 16 ),
-    new Bloco("coluna_meio", "guia", "guia", 48, 16, 16, 16 ),
-    new Bloco("coluna_baixo", "guia", "guia", 48, 32, 16, 16 ),
-
-    new Bloco("plataforma_1", "guia", "guia", 0, 48, 16, 16 ),
-    new Bloco("plataforma_2", "guia", "guia", 16, 48, 16, 16 ),
-    new Bloco("plataforma_3", "guia", "guia", 32, 48, 16, 16 ),
-    
-    new Bloco("inter_1", "guia", "guia", 80, 16, 16, 16),
-    new Bloco("inter_2", "guia", "guia", 80, 0, 16, 16 ),
-    new Bloco("inter_3", "guia", "guia", 64, 16, 16, 16 ),
-    new Bloco("inter_4", "guia", "guia", 64, 0, 16, 16 ),
-
-    new Bloco("full", "guia", "guia", 48, 48, 16, 16 ),
-
-
-
-
-
-
-
-
-    new Bloco("mix","mix", "mix",  16, 0, 16, 16, true),
-    new Bloco("mix","mix", "mix", 0, 16, 16, 16),
-    new Bloco("mix","mix", "mix", 32, 16, 16, 16),
-    new Bloco("mix","mix", "mix", 16, 16, 16, 16),
-    new Bloco("mix","mix", "mix", 0, 0, 16, 16),
-    new Bloco("mix","mix","mix",  32, 0, 16, 16),
-    new Bloco("mix","mix", "mix", 32, 0, 16, 16),
-
-
-    new Bloco("default","escada","escada",  0, 0, 16, 16,true,1),
-    new Bloco("default","grass","verde",  0, 0, 16, 15,true,2),
-    new Bloco("cima","grass", "vermelha", 16, 0, 16, 16,true,2)
-
-    
-  
+let blocosArray: Bloco[] = [  
 
 ]
+function PreloadBlocos(){
+
+
+    const preblocos: Bloco[] = [
+            { name: "default", familia: "bloco_dark", texture_name: "brick_dark", coluna: 1, linha: 1, largura: 16, altura: 16, selectable: true },
+            { name: "default", familia: "bloco", texture_name: "brick", coluna: 1, linha: 1, largura: 16, altura: 16, selectable: true },
+          
+
+          
+            { name: "cima", familia: "grass3", texture_name: "grass3", coluna: 2, linha: 1, largura: 16, altura: 16, selectable: true },
+            { name: "esquerda", familia: "grass3", texture_name: "grass3", coluna: 1, linha: 2, largura: 16, altura: 16 },
+            { name: "direita", familia: "grass3", texture_name: "grass3", coluna: 3, linha: 2, largura: 16, altura: 16 },
+            { name: "baixo", familia: "grass3", texture_name: "grass3", coluna: 2, linha: 3, largura: 16, altura: 16 },
+            { name: "default", familia: "grass3", texture_name: "grass3", coluna: 2, linha: 2, largura: 16, altura: 16 },
+            { name: "esquerda_cima", familia: "grass3", texture_name: "grass3", coluna: 1, linha: 1, largura: 16, altura: 16 },
+            { name: "direita_cima", familia: "grass3", texture_name: "grass3", coluna: 3, linha: 1, largura: 16, altura: 16 },
+            { name: "esquerda_baixo", familia: "grass3", texture_name: "grass3", coluna: 3, linha: 3, largura: 16, altura: 16 },
+            { name: "direita_baixo", familia: "grass3", texture_name: "grass3", coluna: 1, linha: 3, largura: 16, altura: 16 },
+          
+            { name: "coluna_topo", familia: "grass3", texture_name: "grass3", coluna: 4, linha: 1, largura: 16, altura: 16 },
+            { name: "coluna_meio", familia: "grass3", texture_name: "grass3", coluna: 4, linha: 2, largura: 16, altura: 16 },
+            { name: "coluna_baixo", familia: "grass3", texture_name: "grass3", coluna: 4, linha: 3, largura: 16, altura: 16 },
+          
+            { name: "plataforma_1", familia: "grass3", texture_name: "grass3", coluna: 1, linha: 4, largura: 16, altura: 16 },
+            { name: "plataforma_2", familia: "grass3", texture_name: "grass3", coluna: 2, linha: 4, largura: 16, altura: 16 },
+            { name: "plataforma_3", familia: "grass3", texture_name: "grass3", coluna: 3, linha: 4, largura: 16, altura: 16 },
+            { name: "full", familia: "grass3", texture_name: "grass3", coluna: 4, linha: 4, largura: 16, altura: 16 },
+          
+            { name: "default", familia: "escada", texture_name: "escada", coluna: 1, linha: 1, largura: 16, altura: 16, selectable: true, layer: 1 },
+            { name: "default", familia: "verde", texture_name: "grass", coluna: 1, linha: 1, largura: 16, altura: 15, selectable: true, layer: 2 },
+            { name: "cima", familia: "vermelha", texture_name: "grass", coluna: 2, linha: 1, largura: 16, altura: 16, selectable: true, layer: 2 },
+
+
+            { name: "cima", familia: "guia", texture_name: "guia", coluna: 2, linha: 1, largura: 16, altura: 16, selectable: true },
+            { name: "esquerda", familia: "guia", texture_name: "guia", coluna: 1, linha: 2, largura: 16, altura: 16 },
+            { name: "direita", familia: "guia", texture_name: "guia", coluna: 3, linha: 2, largura: 16, altura: 16 },
+            { name: "baixo", familia: "guia", texture_name: "guia", coluna: 2, linha: 3, largura: 16, altura: 16 },
+            { name: "default", familia: "guia", texture_name: "guia", coluna: 2, linha: 2, largura: 16, altura: 16 },
+            { name: "esquerda_cima", familia: "guia", texture_name: "guia", coluna: 1, linha: 1, largura: 16, altura: 16 },
+            { name: "direita_cima", familia: "guia", texture_name: "guia", coluna: 3, linha: 1, largura: 16, altura: 16 },
+            { name: "esquerda_baixo", familia: "guia", texture_name: "guia", coluna: 3, linha: 3, largura: 16, altura: 16 },
+            { name: "direita_baixo", familia: "guia", texture_name: "guia", coluna: 1, linha: 3, largura: 16, altura: 16 },
+          
+            { name: "coluna_topo", familia: "guia", texture_name: "guia", coluna: 4, linha: 1, largura: 16, altura: 16 },
+            { name: "coluna_meio", familia: "guia", texture_name: "guia", coluna: 4, linha: 2, largura: 16, altura: 16 },
+            { name: "coluna_baixo", familia: "guia", texture_name: "guia", coluna: 4, linha: 3, largura: 16, altura: 16 },
+            
+            { name: "plataforma_1", familia: "guia", texture_name: "guia", coluna: 1, linha: 4, largura: 16, altura: 16 },
+            { name: "plataforma_2", familia: "guia", texture_name: "guia", coluna: 2, linha: 4, largura: 16, altura: 16 },
+            { name: "plataforma_3", familia: "guia", texture_name: "guia", coluna: 3, linha: 4, largura: 16, altura: 16 },
+            
+            { name: "inter_1", familia: "guia", texture_name: "guia", coluna: 6, linha: 2, largura: 16, altura: 16 },
+            { name: "inter_2", familia: "guia", texture_name: "guia", coluna: 6, linha: 1, largura: 16, altura: 16 },
+            { name: "inter_3", familia: "guia", texture_name: "guia", coluna: 5, linha: 2, largura: 16, altura: 16 },
+            { name: "inter_4", familia: "guia", texture_name: "guia", coluna: 5, linha: 1, largura: 16, altura: 16 },
+            
+            { name: "full", familia: "guia", texture_name: "guia", coluna: 4, linha: 4, largura: 16, altura: 16 },
+            
+            { name: "mix", familia: "mix", texture_name: "mix", coluna: 2, linha: 1, largura: 16, altura: 16, selectable: true },
+            { name: "mix", familia: "mix", texture_name: "mix", coluna: 1, linha: 2, largura: 16, altura: 16 },
+            { name: "mix", familia: "mix", texture_name: "mix", coluna: 3, linha: 2, largura: 16, altura: 16 },
+            { name: "mix", familia: "mix", texture_name: "mix", coluna: 2, linha: 2, largura: 16, altura: 16 },
+            { name: "mix", familia: "mix", texture_name: "mix", coluna: 1, linha: 1, largura: 16, altura: 16 },
+            { name: "mix", familia: "mix", texture_name: "mix", coluna: 3, linha: 1, largura: 16, altura: 16 }
+              
+              
+          
+          
+    ] 
+
+    preblocos.forEach((pre)=>{
+
+        let xxx = new Bloco(pre);
+        console.log(xxx);
+        blocosArray.push({...xxx})
+    })
+
+};
+
 
 const texturePath = "src/assets/textures/";
 let TexturePool: textura[] = [
@@ -193,7 +247,7 @@ let TexturasArray: textura[] = [
 
 ];
 async function preloadTextures(): Promise<void> {
-    
+
     TexturePool.forEach( (text)=> {
         TexturasArray.push(new textura(text))
     })
@@ -208,8 +262,10 @@ async function preloadTextures(): Promise<void> {
             return new Promise<void>((resolve, reject) => {
                 const img = new Image();
                 img.src = t.path; // Define o URL da imagem
+                t.width = img.width;
                 img.onload = () => {
                     loadedTextures[t.name] = img; // Armazena a imagem carregada
+                    // t.width = img.width; // Armazena a largura
                     resolve();
                 };
                 img.onerror = (err) => reject(`Erro ao carregar textura: ${t.name}`);
@@ -245,12 +301,12 @@ function selectBloco(id: string) {
     Blocoselected = blocosArray[Number(id)];
 };    
 
-function seletorBlocos(bloco: Bloco[], texturas: textura[]) {
+function seletorBlocos() {
     // Seleciona o elemento pai que conterá os blocos
     const blocoContainer = document.querySelector('.bloco') as HTMLDivElement;
 
     // Itera sobre o array de blocos
-    bloco.forEach((bloco, index) => {
+    blocosArray.forEach((bloco, index) => {
         if (bloco.selectable) {
             const div = document.createElement('div'); // Cria uma nova div
             div.className = 'blocos'; // Adiciona a classe 'blocos'
@@ -260,8 +316,8 @@ function seletorBlocos(bloco: Bloco[], texturas: textura[]) {
             const texture = loadedTextures[bloco.texture_name];
             if (texture) {
             div.style.backgroundImage = `url(${texture.src})`;
-            div.style.backgroundSize = `${texture.width * (64 / bloco.sw)}px ${texture.height * (64 / bloco.sh)}px`;
-            div.style.backgroundPosition = `-${bloco.sx * (64 / bloco.sw)}px -${bloco.sy * (64 / bloco.sh)}px`;
+            div.style.backgroundSize = `${texture.width * (64 / bloco.sw!)}px ${texture.height * (64 / bloco.sh!)}px`;
+            div.style.backgroundPosition = `-${bloco.sx! * (64 / bloco.sw!)}px -${bloco.sy! * (64 / bloco.sh!)}px`;
             div.style.backgroundRepeat = 'no-repeat';
             div.style.backgroundColor = 'transparent';
             }
@@ -285,15 +341,15 @@ function seletorBlocos(bloco: Bloco[], texturas: textura[]) {
             blocoContainer.appendChild(div);
     }});
 }
-function DrawBloco(B1: Bloco, texturas: textura[]) {
+function DrawBloco(B1: Bloco) {
         const texture = loadedTextures[B1.texture_name];
         if (texture) {
             ctx.drawImage(
                 texture,
-                B1.sx,
-                B1.sy,
-                B1.sw,
-                B1.sh,
+                B1.sx!,
+                B1.sy!,
+                B1.sw!,
+                B1.sh!,
                 B1.dx!,
                 B1.dy!,
                 B1.dw!,
@@ -308,9 +364,9 @@ function render() {
 
     drawGrid();
     forno();
-    forma.sort((a, b) => a.layer - b.layer).forEach((bloco) => {
+    forma.sort((a, b) => a.layer! - b.layer!).forEach((bloco) => {
      
-        DrawBloco(bloco, TexturasArray);
+        DrawBloco(bloco);
     });
 
     forma = [];
@@ -390,7 +446,7 @@ function CordinateManager(event: MouseEvent) {
 function forno() {
     let coringa: Bloco | null = null;
 
-    cordenadas.sort((a, b) => a.layer - b.layer).forEach((bloco) => {
+    cordenadas.sort((a, b) => a.layer! - b.layer!).forEach((bloco) => {
 
         const  esquerda = bloco.dx! - gridSize 
         const  direita = bloco.dx! + gridSize
@@ -640,7 +696,9 @@ canvasContainer.addEventListener('mouseleave', () => {
 async function init() {
     try {
         await preloadTextures(); // Aguarda o carregamento das texturas
-        seletorBlocos(blocosArray, TexturasArray); // Usa as texturas carregadas
+
+        PreloadBlocos();
+        seletorBlocos(); // Usa as texturas carregadas
         render(); // Renderiza a aplicação
     } catch (error) {
         console.error(error); // Lida com erros no carregamento
