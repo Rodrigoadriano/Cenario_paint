@@ -54,16 +54,6 @@ npm install
 npm run dev
 ```
 
-## Estrutura do Projeto
-
-```
-src/
-├── assets/
-│   └── textures/    # Arquivos de textura
-├── components/
-│   └── ui/          # Componentes de interface
-└── main.ts          # Arquivo principal da aplicação
-```
 
 ## Adicionando Novas Texturas
 
@@ -93,6 +83,4 @@ let TexturePool: textura[] = [
 4. Faça push para a branch (`git push origin feature/NovaFuncionalidade`)
 5. Abra um Pull Request
 
-## Licença
 
-Este projeto está licenciado sob a Licença MIT - veja o arquivo LICENSE para detalhes.
