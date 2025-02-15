@@ -86,6 +86,10 @@ function PreloadBlocos() {
         { name: "plataforma_2", familia: "grass3", texture_name: "grass3", coluna: 2, linha: 4, largura: 16, altura: 16 },
         { name: "plataforma_3", familia: "grass3", texture_name: "grass3", coluna: 3, linha: 4, largura: 16, altura: 16 },
         { name: "full", familia: "grass3", texture_name: "grass3", coluna: 4, linha: 4, largura: 16, altura: 16 },
+        { name: "inter_1", familia: "grass3", texture_name: "grass3", coluna: 6, linha: 2, largura: 16, altura: 16 },
+        { name: "inter_2", familia: "grass3", texture_name: "grass3", coluna: 6, linha: 1, largura: 16, altura: 16 },
+        { name: "inter_3", familia: "grass3", texture_name: "grass3", coluna: 5, linha: 2, largura: 16, altura: 16 },
+        { name: "inter_4", familia: "grass3", texture_name: "grass3", coluna: 5, linha: 1, largura: 16, altura: 16 },
         { name: "default", familia: "escada", texture_name: "escada", coluna: 1, linha: 1, largura: 16, altura: 16, selectable: true, layer: 1 },
         { name: "default", familia: "verde", texture_name: "grass", coluna: 1, linha: 1, largura: 16, altura: 15, selectable: true, layer: 2 },
         { name: "cima", familia: "vermelha", texture_name: "grass", coluna: 2, linha: 1, largura: 16, altura: 16, selectable: true, layer: 2 },
@@ -176,8 +180,36 @@ function drawGrid() {
         for (let y = 0; y < canvas.height; y += gridSize) {
             ctx.strokeRect(x, y, gridSize, gridSize);
             //color stroke gray 
-            // ctx.strokeStyle = "rgba(78, 73, 73, 0.54)";
+            ctx.strokeStyle = "rgba(168, 162, 162, 0.54)";
         }
+    }
+}
+function drawIsoGrid() {
+    function cartesianToIsometric(x, y) {
+        const isoX = (x - y) * canvas.width / 2;
+        const isoY = (x + y) * canvas.height / 2;
+        return { x: isoX, y: isoY };
+    }
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.strokeStyle = 'gray';
+    // Desenhar linhas horizontais
+    for (let y = 0; y <= canvas.height; y + gridSize) {
+        console.log(y);
+        let start = cartesianToIsometric(0, y);
+        let end = cartesianToIsometric(canvas.width, y);
+        ctx.beginPath();
+        ctx.moveTo(start.x + canvas.width / 2, start.y + canvas.height / 4);
+        ctx.lineTo(end.x + canvas.width / 2, end.y + canvas.height / 4);
+        ctx.stroke();
+    }
+    // Desenhar linhas verticais
+    for (let x = 0; x <= canvas.width; x + gridSize) {
+        let start = cartesianToIsometric(x, 0);
+        let end = cartesianToIsometric(x, canvas.height);
+        ctx.beginPath();
+        ctx.moveTo(start.x + canvas.width / 2, start.y + canvas.height / 4);
+        ctx.lineTo(end.x + canvas.width / 2, end.y + canvas.height / 4);
+        ctx.stroke();
     }
 }
 function selectBloco(id) {
@@ -233,7 +265,8 @@ function DrawBloco(B1) {
 }
 function render() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    drawGrid();
+    // drawGrid();
+    drawIsoGrid();
     forno();
     forma.sort((a, b) => a.layer - b.layer).forEach((bloco) => {
         DrawBloco(bloco);
