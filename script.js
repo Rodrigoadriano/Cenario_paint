@@ -122,7 +122,7 @@ function PreloadBlocos() {
     ];
     preblocos.forEach((pre) => {
         let xxx = new Bloco(pre);
-        console.log(xxx);
+        console.log("new Bloco: " + xxx);
         blocosArray.push(Object.assign({}, xxx));
     });
 }
@@ -194,7 +194,7 @@ function drawIsoGrid() {
     ctx.strokeStyle = 'gray';
     // Desenhar linhas horizontais
     for (let y = 0; y <= canvas.height; y + gridSize) {
-        console.log(y);
+        console.log("Y" + y);
         let start = cartesianToIsometric(0, y);
         let end = cartesianToIsometric(canvas.width, y);
         ctx.beginPath();
@@ -265,8 +265,8 @@ function DrawBloco(B1) {
 }
 function render() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    // drawGrid();
-    drawIsoGrid();
+    drawGrid();
+    //drawIsoGrid();
     forno();
     forma.sort((a, b) => a.layer - b.layer).forEach((bloco) => {
         DrawBloco(bloco);
@@ -530,6 +530,7 @@ function init() {
             render(); // Renderiza a aplicação
         }
         catch (error) {
+            console.log("ERROS");
             console.error(error); // Lida com erros no carregamento
         }
     });
